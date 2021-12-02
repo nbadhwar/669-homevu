@@ -12,21 +12,14 @@ const Stack = createNativeStackNavigator();
 
 function App() {
   // const dataModel = getDataModel();
-// dataModel.addItem({object: 'test1'})
-// dataModel.addItem({object: 'test2'})
-// dataModel.addItem({object: 'test3'})
+  // dataModel.addItem({object: 'test1'})
+  // dataModel.addItem({object: 'test2'})
+  // dataModel.addItem({object: 'test3'})
 
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login" >
-        <Stack.Screen 
-            name="Home" 
-            component={HomeScreen} 
-            options={{ title: 'HomeScreen' ,
-            headerStyle: {
-              height: '200px',
-            },
-            headerTitleAlign: 'center' }}/>
+        <Stack.Screen name="Home"  component={HomeScreen} />
         <Stack.Screen name="Details" component={DetailsScreen} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Messages" component={MessageScreen} />

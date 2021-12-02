@@ -16,19 +16,153 @@ const db = initializeFirestore(app, {
 
 class DataModel {
     constructor() {
+
+        //Users
         this.users = [];
         this.userListeners = [];
-        this.chatListeners = [];
+
+
+        //Furniture
+        this.productList = [];
+        this.productListRef = collection(db, 'productList')
+        this.subscribers = [];
+
         this.initUsersOnSnapshot();
-        this.firebaseCheckRef = collection(db, 'firebaseCheck')
+
+        //hardcoded list for testing
+        this.productList.push({ 
+            key: 1,
+            user_id: 'tbd',
+            name: 'Blue Couch',
+            description: "Lightly used. I really like it but doesn't suit my living room.",
+            price: "450.00",
+            image: "https://m.media-amazon.com/images/I/61A1RC8KeRL._AC_SL1500_.jpg",
+            ar_model: "tbd"
+        });
+
+        this.productList.push({ 
+            key: 2,
+            user_id: 'tbd',
+            name: 'Yellow Table',
+            description: "Lightly used. I really like it but doesn't suit my living room.",
+            price: "450.00",
+            image: "https://m.media-amazon.com/images/I/61RwFmhK+uL._AC_SL1500_.jpg",
+            ar_model: "tbd"
+        });
+
+        this.productList.push({ 
+            key: 3,
+            user_id: 'tbd',
+            name: 'Red Chair',
+            description: "Lightly used. I really like it but doesn't suit my living room.",
+            price: "450.00",
+            image: "https://m.media-amazon.com/images/I/51JyYu2pa6L._AC_SL1000_.jpg",
+            ar_model: "tbd"
+        });
+
+        this.asyncInit();
+        
     }
 
-    addItem = async (item) => {
-        let newItemDocRef = await addDoc(this.firebaseCheckRef, item);
-        item.key = newItemDocRef.id;
+    /**********************************************
+     * Furniture Products
+    ************************************************/
+
+    asyncInit = async () => {
+        await this.loadList();
+    }
+
+    loadList = async () => {
+        const q = query(this.productListRef);
+        const querySnap = await getDocs(q);
+        if (querySnap.empty) return;
+
+        querySnap.docs.forEach(qDocSnap => {
+            let key = qDocSnap.id;
+            let data = qDocSnap.data();
+            data.key = key;
+            this.productList.push(data);
+        });
+
+        this.updateSubscribers();
+    }
+
+    subscribeToUpdates(callback) {
+        console.log("new subscriber: ", callback);
+        this.subscribers.push(callback);
+    }
+
+    updateSubscribers() {
+        for (let sub of this.subscribers) {
+            sub(); // just tell them there's an update
+        }
+    }
+
+    // addItem = async (item) => {
+    //     // item.key = getNextKey();
+    //     if (item.isChecked == null) {
+    //         item.isChecked = false;
+    //     }
+    //     if (item.priority == null) {
+    //         item.priority = 1
+    //     }
+    //     let newItemDocRef = await addDoc(this.productListRef, item);
+    //     item.key = newItemDocRef.id;
+
+    //     this.productList.push(item);
+    //     this.updateSubscribers();
+    // }
+
+    // deleteItem = async (key) => {
+    //     //db changes
+    //     const delItemDocRef = doc(db, 'listItems', key)
+    //     await deleteDoc(delItemDocRef)
+
+    //     //local changes
+    //     let idx = this.productList.findIndex((elem) => elem.key === key);
+    //     this.productList.splice(idx, 1);
+    //     this.updateSubscribers();
+    // }
+
+    // updateItem = async (key, newItem) => {
+    //     //db changes
+    //     const updateItemDocRef = doc(db, 'listItems', key)
+    //     await updateDoc(updateItemDocRef, newItem)
+
+    //     //local changes
+    //     let idx = this.productList.findIndex((elem) => elem.key === key);
+    //     this.productList[idx] = newItem;
+
+    //     this.updateSubscribers();
+    // }
+
+    // checkItem(item) {
+    //     item.isChecked = !item.isChecked;
+    //     this.updateSubscribers();
+    // }
+
+    getItem(key) {
+        let idx = this.productList.findIndex((elem) => elem.key === item.key);
+        return (this.productList[key]);
+    }
+
+    getProductList() {
+        return this.productList;
+    }
+
+    getProductListCopy() {
+        return Array.from(this.productList);
+    }
+
+    sortItems = async () => {
+
+        this.updateSubscribers()
     }
 
 
+    /**********************************************
+     * Users and Authentication Data
+    ************************************************/
 
     addUserListener(callbackFunction) {
         const listenerId = Date.now(); // need an ID for deletion later
@@ -82,6 +216,7 @@ class DataModel {
     getUsers() {
         return this.users
     }
+
     async createUser(authUser) {
         let newUser = {
             displayName: authUser.providerData[0].displayName,
