@@ -118,6 +118,7 @@ function Login({ navigation }) {
                     await signInWithEmailAndPassword(auth, email, password);
                   const authUser = credential.user;
                   const user = await dataModel.getUserForAuthUser(authUser);
+                  navigation.navigate('Home', {currentUserId: user.key})
                 } catch (error) {
                   Alert.alert(
                     "Login Error",
@@ -134,6 +135,7 @@ function Login({ navigation }) {
                   const authUser = credential.user;
                   await updateProfile(authUser, { displayName: displayName });
                   const user = await dataModel.getUserForAuthUser(authUser);
+                  navigation.navigate('Home', {currentUserId: user.key})
                 } catch (error) {
                   Alert.alert(
                     "Sign Up Error",
@@ -154,7 +156,6 @@ function Login({ navigation }) {
 }
 
 const loginStyles = StyleSheet.create({
-
 
   body: {
     flex: 1,
