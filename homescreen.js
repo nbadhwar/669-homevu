@@ -9,6 +9,7 @@ function HomeScreen({ navigation }) {
   const dataModel = getDataModel();
   const [productList, setProductList] = useState(dataModel.getProductListCopy());
   console.log(productList)
+
   // const [checked, setChecked] = useState(false)
 
   useEffect(() => {

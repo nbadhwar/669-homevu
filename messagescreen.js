@@ -6,8 +6,6 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 
 function MessageScreen({navigation}) {
 
-
-
   return (
  
     <View style={styles.container}>

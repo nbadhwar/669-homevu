@@ -98,20 +98,21 @@ class DataModel {
         }
     }
 
-    // addItem = async (item) => {
-    //     // item.key = getNextKey();
-    //     if (item.isChecked == null) {
-    //         item.isChecked = false;
-    //     }
-    //     if (item.priority == null) {
-    //         item.priority = 1
-    //     }
-    //     let newItemDocRef = await addDoc(this.productListRef, item);
-    //     item.key = newItemDocRef.id;
+    addItem = async (item) => {
+        // item.key = getNextKey();
+        // if (item.isChecked == null) {
+        //     item.isChecked = false;
+        // }
+        // if (item.priority == null) {
+        //     item.priority = 1
+        // }
+        let newItemDocRef = await addDoc(this.productListRef, item);
+        item.key = newItemDocRef.id;
+        console.log('item added')
 
-    //     this.productList.push(item);
-    //     this.updateSubscribers();
-    // }
+        // this.productList.push(item);
+        this.updateSubscribers();
+    }
 
     // deleteItem = async (key) => {
     //     //db changes
@@ -252,3 +253,4 @@ export function getDataModel() {
     }
     return theDataModel;
 }
+
