@@ -3,11 +3,13 @@ import { Button, CheckBox } from 'react-native-elements';
 import { MaterialIcons as Icon } from '@expo/vector-icons';
 import { FlatList, StyleSheet, Text, View, TextInput, Alert } from 'react-native';
 import { getDataModel } from './DataModel';
+import { homevuColors } from './Colors';
 import {
   getAuth, updateProfile,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword
 } from "firebase/auth";
+import { color } from 'react-native-elements/dist/helpers';
 
 function Login({ navigation }) {
 
@@ -39,9 +41,7 @@ function Login({ navigation }) {
 
   return (
     <View style={loginStyles.body}>
-
       <View style={loginStyles.loginContainer}>
-
         <View style={loginStyles.loginRow}>
           <View style={loginStyles.loginLabelContainer}>
             <Text style={loginStyles.loginLabelText}>Email: </Text>
@@ -93,16 +93,17 @@ function Login({ navigation }) {
         }
         <View style={loginStyles.modeSwitchContainer}>
           {mode === 'login' ?
-            <Text>New user?
+            <Text style={{color: homevuColors.red}} >New user?
+              
               <Text
                 onPress={() => { setMode('signup') }}
-                style={{ color: 'blue' }}> Sign up </Text>
+                style={{ color: homevuColors.blue }}> Sign up </Text>
               instead!</Text>
             :
-            <Text>Existing user?
+            <Text style={{color: homevuColors.red}}>Existing user?
               <Text
                 onPress={() => { setMode('login') }}
-                style={{ color: 'blue' }}> Log In </Text>
+                style={{ color: homevuColors.blue }}> Log In </Text>
               instead!</Text>
           }
         </View>
@@ -111,6 +112,7 @@ function Login({ navigation }) {
         <View style={loginStyles.loginButtonRow}>
           <Button
             title={mode === 'login' ? 'Log in' : 'Sign up'}
+            color={homevuColors.redShade}
             onPress={async () => {
               if (mode === 'login') {
                 try {
@@ -159,22 +161,29 @@ const loginStyles = StyleSheet.create({
 
   body: {
     flex: 1,
+    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: '2%'
   },
+  pageTitle: {
+    justifySelf: 'center',
+    fontWeight: '500',
+    fontSize: 24,
+    color: 'red',
+  },
   loginContainer: {
-    flex: 0.2,
+    flex: 0.8,
     justifyContent: 'center',
     alignItems: 'flex-start',
-    width: '100%',
+    width: '75%',
   },
   loginRow: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'flex-start',
-    alignItems: 'center',
-    width: '100%',
+    alignItems: 'flex-start',
+    width: '100%'
   },
   loginLabelContainer: {
     flex: 0.4,
@@ -182,6 +191,8 @@ const loginStyles = StyleSheet.create({
     alignItems: 'flex-end'
   },
   loginLabelText: {
+    color: homevuColors.red,
+    fontWeight: 'bold',
     fontSize: 18
   },
   loginInputContainer: {
@@ -208,7 +219,7 @@ const loginStyles = StyleSheet.create({
     flex: 1,
     width: '100%',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   }
 
 });

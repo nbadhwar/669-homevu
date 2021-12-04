@@ -11,11 +11,6 @@ import ArScreen from './ARScreen';
 const Stack = createNativeStackNavigator();
 
 function App() {
-  // const dataModel = getDataModel();
-  // dataModel.addItem({object: 'test1'})
-  // dataModel.addItem({object: 'test2'})
-  // dataModel.addItem({object: 'test3'})
-
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login" >

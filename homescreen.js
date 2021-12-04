@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Icon, Button } from 'react-native-elements';
-import { Image, FlatList, StyleSheet, Text, View } from 'react-native';
+import { Image, FlatList, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { getDataModel } from './DataModel';
 import { color } from 'react-native-elements/dist/helpers';
+import { homevuColors } from './Colors';
 
 function HomeScreen({ navigation }) {
 
@@ -20,23 +21,23 @@ function HomeScreen({ navigation }) {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View><View style={styles.container}>
       <View style={styles.listContainer}>
         {/* Comment Out After Done with DetailScreen */}
         {/* <Button
-          title="Data Model Tester"
-          onPress={() => {
-            dataModel.addItem({
-              title: 'Blue Couch',
-              type: 'Couch',
-              description: "Lightly used. I really like it but doesn't suit my living room.",
-              price: 450.00,
-              image: "https://m.media-amazon.com/images/I/61A1RC8KeRL._AC_SL1500_.jpg",
-              ar_model: "tbd"
-            })
-          }
-          }
-        /> */}
+        title="Data Model Tester"
+        onPress={() => {
+          dataModel.addItem({
+            title: 'Blue Couch',
+            type: 'Couch',
+            description: "Lightly used. I really like it but doesn't suit my living room.",
+            price: 450.00,
+            image: "https://m.media-amazon.com/images/I/61A1RC8KeRL._AC_SL1500_.jpg",
+            ar_model: "tbd"
+          })
+        }
+        }
+      /> */}
         <FlatList
           contentContainerStyle={styles.listContentContainer}
           data={productList}
@@ -56,26 +57,30 @@ function HomeScreen({ navigation }) {
           }}
         />
       </View>
-
-      <Button
-        title="+"
+    </View>
+      <TouchableOpacity
+        style={[styles.listItemAddButton, styles.buttonShadowProp]}
         onPress={() => {
           navigation.navigate("Details");
-        }}
-      />
+        }}>
+        <Icon
+          name='add'
+          type='material-icons'
+          color='white'
+        />
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: 'white',
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
   listContainer: {
-    flex: 0.8,
     padding: 30,
     width: '100%',
   },
@@ -120,17 +125,26 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'green'
   },
-  listItemButton: {
-    flex: 0.2,
-    alignSelf: screenLeft,
-    height: 15,
-    width: '50%',
+  listItemAddButton: {
+    position: 'fixed',
+    right: 0,
+    bottom: 0,
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 100,
+    marginHorizontal: '5%',
+    marginVertical: '10%',
+    backgroundColor: homevuColors.green,
   },
-  listItemButtons: {
-    flex: 0.2,
-    flexDirection: 'row',
-
-  }
+  buttonShadowProp: {
+    shadowColor: homevuColors.greenShade,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.6,
+    shadowRadius: 10,
+  },
 });
 
 export default HomeScreen;
