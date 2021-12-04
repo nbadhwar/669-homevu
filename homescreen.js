@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Icon, Button } from 'react-native-elements';
 import { Image, FlatList, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { getDataModel } from './DataModel';
+import { getDataModel, homevuColors } from './DataModel';
 import { color } from 'react-native-elements/dist/helpers';
-import { homevuColors } from './Colors';
 
 function HomeScreen({ navigation }) {
 

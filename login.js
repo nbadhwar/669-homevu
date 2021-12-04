@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, CheckBox } from 'react-native-elements';
 import { MaterialIcons as Icon } from '@expo/vector-icons';
 import { FlatList, StyleSheet, Text, View, TextInput, Alert } from 'react-native';
-import { getDataModel } from './DataModel';
-import { homevuColors } from './Colors';
+import { getDataModel, homevuColors } from './DataModel';
 import {
   getAuth, updateProfile,
   signInWithEmailAndPassword,
