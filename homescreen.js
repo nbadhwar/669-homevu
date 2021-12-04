@@ -22,6 +22,21 @@ function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.listContainer}>
+        {/* Comment Out After Done with DetailScreen */}
+        {/* <Button
+          title="Data Model Tester"
+          onPress={() => {
+            dataModel.addItem({
+              title: 'Blue Couch',
+              type: 'Couch',
+              description: "Lightly used. I really like it but doesn't suit my living room.",
+              price: 450.00,
+              image: "https://m.media-amazon.com/images/I/61A1RC8KeRL._AC_SL1500_.jpg",
+              ar_model: "tbd"
+            })
+          }
+          }
+        /> */}
         <FlatList
           contentContainerStyle={styles.listContentContainer}
           data={productList}
@@ -34,7 +49,7 @@ function HomeScreen({ navigation }) {
                 <Text style={styles.listItemDescription}>{item.description}</Text>
                 <View style={styles.listItemDetails}>
                   {/* TODO: More Details in a row - availability, see more button */}
-                  <Text style={styles.listItemPrice}>{item.price}</Text>
+                  <Text style={styles.listItemPrice}>${item.price}</Text>
                 </View>
               </View>
             );
@@ -43,7 +58,7 @@ function HomeScreen({ navigation }) {
       </View>
 
       <Button
-        title="Add New Product"
+        title="+"
         onPress={() => {
           navigation.navigate("Details");
         }}
