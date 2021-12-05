@@ -16,17 +16,6 @@ function DetailsScreen({navigation, route}) {
   
   const dataModel = getDataModel();
 
-  // return (
-  //   <View style={styles.container}>
-  //     <Button
-  //           title="Home"
-  //           onPress={()=>{
-  //           navigation.navigate("Home");
-  //           }}
-  //       />
-  //   </View>
-  // );
-
   return (
     <View style={styles.container}>
       <View style={styles.inputArea}>
