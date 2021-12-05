@@ -33,9 +33,9 @@ class DataModel {
         this.productList.push({ 
             key: 1,
             user_id: 'tbd',
-            name: 'Blue Couch',
+            title: 'Blue Couch',
             description: "Lightly used. I really like it but doesn't suit my living room.",
-            price: "450.00",
+            price: 450.00,
             image: "https://m.media-amazon.com/images/I/61A1RC8KeRL._AC_SL1500_.jpg",
             ar_model: "tbd"
         });
@@ -43,9 +43,9 @@ class DataModel {
         this.productList.push({ 
             key: 2,
             user_id: 'tbd',
-            name: 'Yellow Table',
+            title: 'Yellow Table',
             description: "Lightly used. I really like it but doesn't suit my living room.",
-            price: "450.00",
+            price: 450.00,
             image: "https://m.media-amazon.com/images/I/61RwFmhK+uL._AC_SL1500_.jpg",
             ar_model: "tbd"
         });
@@ -53,9 +53,9 @@ class DataModel {
         this.productList.push({ 
             key: 3,
             user_id: 'tbd',
-            name: 'Red Chair',
+            title: 'Red Chair',
             description: "Lightly used. I really like it but doesn't suit my living room.",
-            price: "450.00",
+            price: 450.00,
             image: "https://m.media-amazon.com/images/I/51JyYu2pa6L._AC_SL1000_.jpg",
             ar_model: "tbd"
         });
@@ -98,49 +98,83 @@ class DataModel {
         }
     }
 
+    /**
+     * Product List Item 
+     * properties: id, user_id, display_name [username], title, type, date added, availability,
+     *             description, condition, price, image, ar_model
+     * other possible properties: location, dimensions, tags [array of hashtags for easier search]
+     * @param {*} item 
+     */
+
     addItem = async (item) => {
-        // item.key = getNextKey();
-        // if (item.isChecked == null) {
-        //     item.isChecked = false;
-        // }
-        // if (item.priority == null) {
-        //     item.priority = 1
-        // }
-        let newItemDocRef = await addDoc(this.productListRef, item);
+
+        //TODO: set item.user_id
+        //TODO: set item.displayName = user.displayName
+        //For this, we need to get login / signup info from Login.js
+
+        if(item.title == null) {
+            item.title = 'untitled item'
+        }
+
+        //Maybe a dropdown for furniture types in DetailScreen
+        if(item.type == null) {
+            item.type = 'furniture'
+        }
+
+        item.date = Date.now()
+
+        //true - available, false - sold
+        //true by default
+        //Could be a checkbox
+        item.availability = true
+
+        if(item.description == null) {
+            item.description = item.title + ' is for sale now.'
+        }
+
+        if(item.price == null) {
+            item.price = 0
+        }
+
+        if(item.image == null) {
+            console.log('image unavailable for ' + item.title)
+        }
+
+        if(item.ar_model == null) {
+            console.log('model unavailable for ' + item.title)
+        }
+
+        const newItemDocRef = await addDoc(this.productListRef, item);
         item.key = newItemDocRef.id;
         console.log('item added')
 
-        // this.productList.push(item);
+        //local update
+        this.productList.push(item);
         this.updateSubscribers();
     }
 
-    // deleteItem = async (key) => {
-    //     //db changes
-    //     const delItemDocRef = doc(db, 'listItems', key)
-    //     await deleteDoc(delItemDocRef)
+    deleteItem = async (key) => {
+        //db changes
+        const delItemDocRef = doc(db, 'productList', key)
+        await deleteDoc(delItemDocRef)
 
-    //     //local changes
-    //     let idx = this.productList.findIndex((elem) => elem.key === key);
-    //     this.productList.splice(idx, 1);
-    //     this.updateSubscribers();
-    // }
+        //local changes
+        let idx = this.productList.findIndex((elem) => elem.key === key);
+        this.productList.splice(idx, 1);
+        this.updateSubscribers();
+    }
 
-    // updateItem = async (key, newItem) => {
-    //     //db changes
-    //     const updateItemDocRef = doc(db, 'listItems', key)
-    //     await updateDoc(updateItemDocRef, newItem)
+    updateItem = async (key, newItem) => {
+        //db changes
+        const updateItemDocRef = doc(db, 'productList', key)
+        await updateDoc(updateItemDocRef, newItem)
 
-    //     //local changes
-    //     let idx = this.productList.findIndex((elem) => elem.key === key);
-    //     this.productList[idx] = newItem;
+        //local changes
+        let idx = this.productList.findIndex((elem) => elem.key === key);
+        this.productList[idx] = newItem;
 
-    //     this.updateSubscribers();
-    // }
-
-    // checkItem(item) {
-    //     item.isChecked = !item.isChecked;
-    //     this.updateSubscribers();
-    // }
+        this.updateSubscribers();
+    }
 
     getItem(key) {
         let idx = this.productList.findIndex((elem) => elem.key === item.key);
@@ -254,3 +288,22 @@ export function getDataModel() {
     return theDataModel;
 }
 
+/**
+ * Color Scheme variables for the App
+ */
+export const homevuColors = {
+    red: '#B4041E',
+    blue: '#00A6ED',
+    green: '#7FB800',
+    yellow: '#FFB400',
+
+    redShade: '#640211',
+    blueShade: '#0072A3',
+    greenShade: '#466600',
+    yellowShade: '#A37200',
+
+    redTint: '#FC5F77',
+    blueTint: '#47C8FF',
+    greenTint: '#BEF16E',
+    yellowTint: '#FFC847',
+}
