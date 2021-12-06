@@ -7,8 +7,7 @@ import { color } from 'react-native-elements/dist/helpers';
 
 function DisplayScreen({ navigation, route }) {
     let item = route.params.item
-    const currentUser = route.params.currentUser
-
+    const [currentUser, setCurrentUser] = useState(route.params ? route.params.currentUser : null)
     const dataModel = getDataModel();
 
     return (

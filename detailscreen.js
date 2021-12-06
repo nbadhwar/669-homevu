@@ -7,7 +7,6 @@ import { getDataModel } from './DataModel';
 function DetailsScreen({ navigation, route }) {
 
   let item = route.params ? route.params.item : null;
-  let user = route.params ? route.params.currentUser : null
 
   let editMode = (item != null);
   const [inputText, setInputText] = useState(item ? item.title : '');
@@ -15,6 +14,7 @@ function DetailsScreen({ navigation, route }) {
   const [isChecked, setIsChecked] = useState(item ? item.available : false);
   const [price, setPrice] = useState(item ? item.price : '');
   const [image, setImage] = useState(item ? item.image : "https://m.media-amazon.com/images/I/51JyYu2pa6L._AC_SL1000_.jpg");
+  const [currentUser, setCurrentUser] = useState(route.params ? route.params.currentUser : null)
 
   const dataModel = getDataModel();
 
@@ -91,7 +91,7 @@ function DetailsScreen({ navigation, route }) {
               console.log('new data model: ', dataModel.getProductList());
             } else {
               // update data model
-              dataModel.addItem({ user_id: user.key, sellerName: user.displayName, title: inputText, description: description, price: price, image: image, isChecked: isChecked }); // let the data model add the key
+              dataModel.addItem({ user_id: currentUser.key, sellerName: currentUser.displayName, title: inputText, description: description, price: price, image: image, isChecked: isChecked }); // let the data model add the key
               //console.log('new data model: ', dataModel.getProdcutList());
             }
             navigation.navigate("Home");
