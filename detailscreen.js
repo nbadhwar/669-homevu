@@ -1,83 +1,88 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Input, Button, CheckBox } from 'react-native-elements';
 import { FlatList, StyleSheet, Text, TextInput, View, Pressable, TouchableOpacity } from 'react-native';
 import { getDataModel } from './DataModel';
 
 
-function DetailsScreen({navigation, route}) {
+function DetailsScreen({ navigation, route }) {
 
   let item = route.params ? route.params.item : null;
+  let user = route.params ? route.params.currentUser : null
+
   let editMode = (item != null);
-  const [inputText, setInputText] = useState(item? item.name : '');
-  const [description, setDescription] = useState(item? item.description : '');
-  const [isChecked, setIsChecked] = useState(item ? item.available: false);
-  const [price, setPrice] = useState(item? item.price : '');
-  const [image, setImage] = useState(item? item.image : "https://m.media-amazon.com/images/I/51JyYu2pa6L._AC_SL1000_.jpg");
-  
+  const [inputText, setInputText] = useState(item ? item.title : '');
+  const [description, setDescription] = useState(item ? item.description : '');
+  const [isChecked, setIsChecked] = useState(item ? item.available : false);
+  const [price, setPrice] = useState(item ? item.price : '');
+  const [image, setImage] = useState(item ? item.image : "https://m.media-amazon.com/images/I/51JyYu2pa6L._AC_SL1000_.jpg");
+
   const dataModel = getDataModel();
 
   return (
     <View style={styles.container}>
       <View style={styles.inputArea}>
         <Text style={styles.inputLabel}>Item Name:</Text>
-        <Input 
-          containerStyle={styles.inputBox} 
+        <Input
+          containerStyle={styles.inputBox}
           placeholder="Item title..."
-          onChangeText={(text)=>setInputText(text)}
+          onChangeText={(text) => setInputText(text)}
           value={inputText}
         />
-      </View>  
+      </View>
       <View style={styles.inputArea}>
         <Text style={styles.inputLabel}>Description:</Text>
-        <Input 
-          containerStyle={styles.inputBox} 
+        <Input
+          containerStyle={styles.inputBox}
           placeholder="Item description..."
-          onChangeText={(text)=>setDescription(text)}
+          onChangeText={(text) => setDescription(text)}
           value={description}
         />
       </View>
       <View style={styles.inputArea}>
         <Text style={styles.inputLabel}>Price:</Text>
-        <Input 
-          containerStyle={styles.inputBox} 
+        <Input
+          containerStyle={styles.inputBox}
           placeholder="Item price..."
-          onChangeText={(text)=>setPrice(text)}
+          onChangeText={(text) => setPrice(text)}
           value={price}
         />
       </View>
       <View style={styles.inputArea}>
         <Text style={styles.inputLabel}>Image:</Text>
-        <Input 
-          containerStyle={styles.inputBox} 
+        <Input
+          containerStyle={styles.inputBox}
           placeholder="Item image..."
-          onChangeText={(text)=>setImage(text)}
+          onChangeText={(text) => setImage(text)}
           value={image}
         />
       </View>
-      <View>      
+      <View>
         <CheckBox
-          title= "Available"
-          checked = {isChecked}
-          onPress={ () => {
+          title="Available"
+          checked={isChecked}
+          onPress={() => {
             setIsChecked(!isChecked);
-          }}      
+          }}
         />
-      </View>      
+      </View>
 
       <View style={styles.buttonArea}>
         <Button
           containerStyle={styles.button}
           title="Cancel"
-          onPress={()=>{
+          onPress={() => {
             navigation.navigate("Home");
           }}
         />
         <Button
           containerStyle={styles.button}
           title={editMode ? "Save" : "Add Item"}
-          onPress={()=>{
+          onPress={() => {
             if (editMode) {
-              item.name = inputText;
+              item.user_id = user.key
+              item.sellerName = user.displayName
+              console.log(item.user_id + " : " + item.sellerName)
+              item.title = inputText;
               item.isChecked = isChecked;
               item.description = description;
               item.price = price;
@@ -86,7 +91,7 @@ function DetailsScreen({navigation, route}) {
               console.log('new data model: ', dataModel.getProductList());
             } else {
               // update data model
-              dataModel.addItem({name: inputText, description: description, price: price, image: image, isChecked: isChecked}); // let the data model add the key
+              dataModel.addItem({ user_id: user.key, sellerName: user.displayName, title: inputText, description: description, price: price, image: image, isChecked: isChecked }); // let the data model add the key
               //console.log('new data model: ', dataModel.getProdcutList());
             }
             navigation.navigate("Home");
@@ -95,7 +100,7 @@ function DetailsScreen({navigation, route}) {
       </View>
     </View>
   );
-  
+
 }
 
 const styles = StyleSheet.create({

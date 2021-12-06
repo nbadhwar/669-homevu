@@ -30,7 +30,7 @@ class DataModel {
         this.initUsersOnSnapshot();
 
         //hardcoded list for testing
-        this.productList.push({ 
+        this.productList.push({
             key: 1,
             user_id: 'tbd',
             title: 'Blue Couch',
@@ -40,7 +40,7 @@ class DataModel {
             ar_model: "tbd"
         });
 
-        this.productList.push({ 
+        this.productList.push({
             key: 2,
             user_id: 'tbd',
             title: 'Yellow Table',
@@ -50,7 +50,7 @@ class DataModel {
             ar_model: "tbd"
         });
 
-        this.productList.push({ 
+        this.productList.push({
             key: 3,
             user_id: 'tbd',
             title: 'Red Chair',
@@ -61,7 +61,7 @@ class DataModel {
         });
 
         this.asyncInit();
-        
+
     }
 
     /**********************************************
@@ -112,12 +112,21 @@ class DataModel {
         //TODO: set item.displayName = user.displayName
         //For this, we need to get login / signup info from Login.js
 
-        if(item.title == null) {
+        if (item.title == null) {
             item.title = 'untitled item'
         }
 
+        //set it to a default current user - test@example.com / 123456
+        if (item.user_id == null) {
+            item.user_id = "fpgcb5WYYmQw1o67ZqQ3pA5nmtF2"
+        }
+
+        //set it to a default current user display name - test@example.com /123456
+        if (item.sellerName == null) {
+            item.sellerName = "alice"
+        }
         //Maybe a dropdown for furniture types in DetailScreen
-        if(item.type == null) {
+        if (item.type == null) {
             item.type = 'furniture'
         }
 
@@ -128,19 +137,19 @@ class DataModel {
         //Could be a checkbox
         item.availability = true
 
-        if(item.description == null) {
+        if (item.description == null) {
             item.description = item.title + ' is for sale now.'
         }
 
-        if(item.price == null) {
+        if (item.price == null) {
             item.price = 0
         }
 
-        if(item.image == null) {
+        if (item.image == null) {
             console.log('image unavailable for ' + item.title)
         }
 
-        if(item.ar_model == null) {
+        if (item.ar_model == null) {
             console.log('model unavailable for ' + item.title)
         }
 
@@ -252,6 +261,10 @@ class DataModel {
         return this.users
     }
 
+    getUser(key) {
+        let idx = this.users.findIndex((elem) => elem.key === item.key);
+        return (this.users[key]);
+    }
     async createUser(authUser) {
         let newUser = {
             displayName: authUser.providerData[0].displayName,
