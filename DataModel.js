@@ -2,7 +2,7 @@ import { firebaseConfig } from './Secrets';
 import { initializeApp, getApps } from 'firebase/app';
 import {
     initializeFirestore, collection, query, orderBy, limit,
-    doc, getDoc, getDocs, updateDoc, addDoc, deleteDoc, onSnapshot
+    doc, getDoc, getDocs, updateDoc, addDoc, deleteDoc, onSnapshot, setDoc
 } from "firebase/firestore";
 
 
@@ -20,7 +20,7 @@ class DataModel {
         //Users
         this.users = [];
         this.userListeners = [];
-
+        this.chatListeners = [];
 
         //Furniture
         this.productList = [];
@@ -30,38 +30,38 @@ class DataModel {
         this.initUsersOnSnapshot();
 
         //hardcoded list for testing
-        this.productList.push({ 
-            key: 1,
-            user_id: 'tbd',
-            title: 'Blue Couch',
-            description: "Lightly used. I really like it but doesn't suit my living room.",
-            price: 450.00,
-            image: "https://m.media-amazon.com/images/I/61A1RC8KeRL._AC_SL1500_.jpg",
-            ar_model: "tbd"
-        });
+        // this.productList.push({
+        //     key: 1,
+        //     user_id: 'tbd',
+        //     title: 'Blue Couch',
+        //     description: "Lightly used. I really like it but doesn't suit my living room.",
+        //     price: 450.00,
+        //     image: "https://m.media-amazon.com/images/I/61A1RC8KeRL._AC_SL1500_.jpg",
+        //     ar_model: "tbd"
+        // });
 
-        this.productList.push({ 
-            key: 2,
-            user_id: 'tbd',
-            title: 'Yellow Table',
-            description: "Lightly used. I really like it but doesn't suit my living room.",
-            price: 450.00,
-            image: "https://m.media-amazon.com/images/I/61RwFmhK+uL._AC_SL1500_.jpg",
-            ar_model: "tbd"
-        });
+        // this.productList.push({
+        //     key: 2,
+        //     user_id: 'tbd',
+        //     title: 'Yellow Table',
+        //     description: "Lightly used. I really like it but doesn't suit my living room.",
+        //     price: 450.00,
+        //     image: "https://m.media-amazon.com/images/I/61RwFmhK+uL._AC_SL1500_.jpg",
+        //     ar_model: "tbd"
+        // });
 
-        this.productList.push({ 
-            key: 3,
-            user_id: 'tbd',
-            title: 'Red Chair',
-            description: "Lightly used. I really like it but doesn't suit my living room.",
-            price: 450.00,
-            image: "https://m.media-amazon.com/images/I/51JyYu2pa6L._AC_SL1000_.jpg",
-            ar_model: "tbd"
-        });
+        // this.productList.push({
+        //     key: 3,
+        //     user_id: 'tbd',
+        //     title: 'Red Chair',
+        //     description: "Lightly used. I really like it but doesn't suit my living room.",
+        //     price: 450.00,
+        //     image: "https://m.media-amazon.com/images/I/51JyYu2pa6L._AC_SL1000_.jpg",
+        //     ar_model: "tbd"
+        // });
 
         this.asyncInit();
-        
+
     }
 
     /**********************************************
@@ -112,12 +112,21 @@ class DataModel {
         //TODO: set item.displayName = user.displayName
         //For this, we need to get login / signup info from Login.js
 
-        if(item.title == null) {
+        if (item.title == null) {
             item.title = 'untitled item'
         }
 
+        //set it to a default current user - test@example.com / 123456
+        if (item.user_id == null) {
+            item.user_id = "fpgcb5WYYmQw1o67ZqQ3pA5nmtF2"
+        }
+
+        //set it to a default current user display name - test@example.com /123456
+        if (item.sellerName == null) {
+            item.sellerName = "alice"
+        }
         //Maybe a dropdown for furniture types in DetailScreen
-        if(item.type == null) {
+        if (item.type == null) {
             item.type = 'furniture'
         }
 
@@ -128,19 +137,19 @@ class DataModel {
         //Could be a checkbox
         item.availability = true
 
-        if(item.description == null) {
+        if (item.description == null) {
             item.description = item.title + ' is for sale now.'
         }
 
-        if(item.price == null) {
+        if (item.price == null) {
             item.price = 0
         }
 
-        if(item.image == null) {
+        if (item.image == null) {
             console.log('image unavailable for ' + item.title)
         }
 
-        if(item.ar_model == null) {
+        if (item.ar_model == null) {
             console.log('model unavailable for ' + item.title)
         }
 
@@ -252,6 +261,20 @@ class DataModel {
         return this.users
     }
 
+    getUser(key) {
+        let idx = this.users.findIndex((elem) => elem.key === item.key);
+        return (this.users[key]);
+    }
+
+    getUserForID(id) {
+        for (let u of this.users) {
+            if (u.key === id) {
+                return u;
+            }
+        }
+        return null;
+    }
+
     async createUser(authUser) {
         let newUser = {
             displayName: authUser.providerData[0].displayName,
@@ -277,7 +300,77 @@ class DataModel {
         let newUser = await this.createUser(authUser);
         return newUser;
     }
+
+
+    /**********************************************
+    * Chat Messages
+   ************************************************/
+
+    addChatListener(chatId, callbackFunction) {
+        const listenerId = Date.now();
+        const listener = {
+            id: listenerId,
+            chatId: chatId,
+            callback: callbackFunction
+        }
+        this.chatListeners.push(listener);
+        let chatDocRef = doc(db, 'chats', chatId);
+        let messagesRef = collection(chatDocRef, 'messages');
+        let messageQuery = query(messagesRef, orderBy('timestamp', 'desc'));
+
+        onSnapshot(messageQuery, (qSnap) => {
+            if (qSnap.empty) return;
+            let allMessages = [];
+            qSnap.forEach((docSnap) => {
+                let message = docSnap.data();
+                message.key = docSnap.id;
+                message.author = this.getUserForID(message.authorId); // convert Id to user object
+                message.timestamp = message.timestamp.toDate(); // convert Firebase timestamp to JS Date
+                allMessages.push(message);
+            });
+            this.notifyChatListeners(chatId, allMessages);
+        });
+
+        return listenerId;
+    }
+
+    removeChatListener(listenerId) {
+        let idx = this.chatListeners.findIndex((elem) => elem.listenerId === listenerId);
+        this.chatListeners.splice(idx, 1);
+    }
+
+    notifyChatListeners(chatId, allMessages) {
+        for (let cl of this.chatListeners) {
+            if (cl.chatId === chatId) {
+                cl.callback(allMessages);
+            }
+        }
+    }
+
+    getChatIdForUserIds(user1Id, user2Id) {
+        let userPair = [user1Id, user2Id];
+        userPair.sort();
+        return (userPair[0] + '-' + userPair[1]);
+    }
+
+    addChatMessage(chatId, messageContents) {
+
+        // construct a reference to the chat's Firestore doc
+        let chatDocRef = doc(db, 'chats', chatId);
+
+        // create chat doc if it doesn't exist, otherwise update participants
+        let participants = messageContents.recipients;
+        participants.push(messageContents.authorId);
+        setDoc(chatDocRef, { participants: participants });
+
+        // add the message to the chat doc's 'messages' collection
+        let messagesRef = collection(chatDocRef, 'messages');
+        addDoc(messagesRef, messageContents); // let onSnapshot() do it's work!
+    }
+
 }
+
+
 
 let theDataModel;
 

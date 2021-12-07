@@ -119,7 +119,7 @@ function Login({ navigation }) {
                     await signInWithEmailAndPassword(auth, email, password);
                   const authUser = credential.user;
                   const user = await dataModel.getUserForAuthUser(authUser);
-                  navigation.navigate('Home', { currentUserId: user.key })
+                  navigation.navigate('Home', { currentUser: user })
                 } catch (error) {
                   Alert.alert(
                     "Login Error",
@@ -136,7 +136,7 @@ function Login({ navigation }) {
                   const authUser = credential.user;
                   await updateProfile(authUser, { displayName: displayName });
                   const user = await dataModel.getUserForAuthUser(authUser);
-                  navigation.navigate('Home', { currentUserId: user.key })
+                  navigation.navigate('Home', { currentUser: user })
                 } catch (error) {
                   Alert.alert(
                     "Sign Up Error",

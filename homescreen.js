@@ -2,18 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Icon, Button } from 'react-native-elements';
 import { Image, FlatList, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { getDataModel, homevuColors } from './DataModel';
-import { color } from 'react-native-elements/dist/helpers';
 
-function HomeScreen({ navigation }) {
+function HomeScreen({ navigation, route }) {
 
   const dataModel = getDataModel();
   const [productList, setProductList] = useState(dataModel.getProductListCopy());
-  console.log(productList)
-
-  // const [checked, setChecked] = useState(false)
+  const [currentUser, setCurrentUser] = useState(route.params ? route.params.currentUser : null)
+  console.log(currentUser)
 
   useEffect(() => {
-    console.log(dataModel)
     dataModel.subscribeToUpdates(() => {
       setProductList(dataModel.getProductListCopy());
     });
@@ -22,45 +19,39 @@ function HomeScreen({ navigation }) {
   return (
     <View><View style={styles.container}>
       <View style={styles.listContainer}>
-        {/* Comment Out After Done with DetailScreen */}
-        {/* <Button
-        title="Data Model Tester"
-        onPress={() => {
-          dataModel.addItem({
-            title: 'Blue Couch',
-            type: 'Couch',
-            description: "Lightly used. I really like it but doesn't suit my living room.",
-            price: 450.00,
-            image: "https://m.media-amazon.com/images/I/61A1RC8KeRL._AC_SL1500_.jpg",
-            ar_model: "tbd"
-          })
-        }
-        }
-      /> */}
+        <Button
+          title="Messages"
+          onPress={() => {
+            navigation.navigate("Messages", {currentUser: currentUser});
+          }}
+        />
         <FlatList
           contentContainerStyle={styles.listContentContainer}
           data={productList}
           renderItem={({ item }) => {
             return (
-              <View style={[styles.listItem, styles.shadowProp]}>
-                <Image style={styles.listItemImage}
-                  source={{ uri: item.image }} />
-                <Text style={styles.listItemName}>{item.name}</Text>
-                <Text style={styles.listItemDescription}>{item.description}</Text>
-                <View style={styles.listItemDetails}>
-                  {/* TODO: More Details in a row - availability, see more button */}
-                  <Text style={styles.listItemPrice}>${item.price}</Text>
-                </View>
+              <View>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('Display', { item: item, currentUser: currentUser })}>
+                  <View style={[styles.listItem, styles.shadowProp]}>
+                    <Image style={styles.listItemImage}
+                      source={{ uri: item.image }} />
+                    <Text style={styles.listItemTitle}>{item.title}</Text>
+                    <View style={styles.listItemDetails}>
+                      <Text style={styles.listItemPrice}>${item.price}</Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
               </View>
             );
           }}
         />
       </View>
-    </View>
+    </View >
       <TouchableOpacity
         style={[styles.listItemAddButton, styles.buttonShadowProp]}
         onPress={() => {
-          navigation.navigate("Details");
+          navigation.navigate("Details", { currentUser: currentUser });
         }}>
         <Icon
           name='add'
@@ -68,7 +59,7 @@ function HomeScreen({ navigation }) {
           color='white'
         />
       </TouchableOpacity>
-    </View>
+    </View >
   );
 }
 
@@ -108,7 +99,7 @@ const styles = StyleSheet.create({
     height: 200,
     resizeMode: 'contain'
   },
-  listItemName: {
+  listItemTitle: {
     flex: 0.7,
     fontSize: 18,
     fontWeight: 'bold'
