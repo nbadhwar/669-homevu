@@ -9,7 +9,6 @@ function DisplayScreen({ navigation, route }) {
     let item = route.params.item
     const [currentUser, setCurrentUser] = useState(route.params ? route.params.currentUser : null)
     const dataModel = getDataModel();
-
     return (
         <View style={styles.body}>
             <View>
@@ -52,7 +51,9 @@ function DisplayScreen({ navigation, route }) {
                         <Text style={[styles.displayButtonText]}>Delete Item</Text>
                     </TouchableOpacity>
                 </View> :
-                <View></View>
+                <View>
+                    {/* TODO: Add Message Screen Button */}
+                </View>
             }
             <View>
             </View>

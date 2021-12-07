@@ -8,7 +8,7 @@ function HomeScreen({ navigation, route }) {
   const dataModel = getDataModel();
   const [productList, setProductList] = useState(dataModel.getProductListCopy());
   const [currentUser, setCurrentUser] = useState(route.params ? route.params.currentUser : null)
-
+  
   useEffect(() => {
     dataModel.subscribeToUpdates(() => {
       setProductList(dataModel.getProductListCopy());

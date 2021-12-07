@@ -30,35 +30,35 @@ class DataModel {
         this.initUsersOnSnapshot();
 
         //hardcoded list for testing
-        this.productList.push({
-            key: 1,
-            user_id: 'tbd',
-            title: 'Blue Couch',
-            description: "Lightly used. I really like it but doesn't suit my living room.",
-            price: 450.00,
-            image: "https://m.media-amazon.com/images/I/61A1RC8KeRL._AC_SL1500_.jpg",
-            ar_model: "tbd"
-        });
+        // this.productList.push({
+        //     key: 1,
+        //     user_id: 'tbd',
+        //     title: 'Blue Couch',
+        //     description: "Lightly used. I really like it but doesn't suit my living room.",
+        //     price: 450.00,
+        //     image: "https://m.media-amazon.com/images/I/61A1RC8KeRL._AC_SL1500_.jpg",
+        //     ar_model: "tbd"
+        // });
 
-        this.productList.push({
-            key: 2,
-            user_id: 'tbd',
-            title: 'Yellow Table',
-            description: "Lightly used. I really like it but doesn't suit my living room.",
-            price: 450.00,
-            image: "https://m.media-amazon.com/images/I/61RwFmhK+uL._AC_SL1500_.jpg",
-            ar_model: "tbd"
-        });
+        // this.productList.push({
+        //     key: 2,
+        //     user_id: 'tbd',
+        //     title: 'Yellow Table',
+        //     description: "Lightly used. I really like it but doesn't suit my living room.",
+        //     price: 450.00,
+        //     image: "https://m.media-amazon.com/images/I/61RwFmhK+uL._AC_SL1500_.jpg",
+        //     ar_model: "tbd"
+        // });
 
-        this.productList.push({
-            key: 3,
-            user_id: 'tbd',
-            title: 'Red Chair',
-            description: "Lightly used. I really like it but doesn't suit my living room.",
-            price: 450.00,
-            image: "https://m.media-amazon.com/images/I/51JyYu2pa6L._AC_SL1000_.jpg",
-            ar_model: "tbd"
-        });
+        // this.productList.push({
+        //     key: 3,
+        //     user_id: 'tbd',
+        //     title: 'Red Chair',
+        //     description: "Lightly used. I really like it but doesn't suit my living room.",
+        //     price: 450.00,
+        //     image: "https://m.media-amazon.com/images/I/51JyYu2pa6L._AC_SL1000_.jpg",
+        //     ar_model: "tbd"
+        // });
 
         this.asyncInit();
 

@@ -79,8 +79,8 @@ function DetailsScreen({ navigation, route }) {
           title={editMode ? "Save" : "Add Item"}
           onPress={() => {
             if (editMode) {
-              item.user_id = user.key
-              item.sellerName = user.displayName
+              item.user_id = currentUser.key
+              item.sellerName = currentUser.displayName
               console.log(item.user_id + " : " + item.sellerName)
               item.title = inputText;
               item.isChecked = isChecked;
