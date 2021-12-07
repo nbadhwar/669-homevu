@@ -4,11 +4,12 @@ import { Image, FlatList, StyleSheet, Text, View, TouchableOpacity } from 'react
 import { getDataModel, homevuColors } from './DataModel';
 import { color } from 'react-native-elements/dist/helpers';
 
-function HomeScreen({ navigation }) {
+function HomeScreen({ navigation, route }) {
 
   const dataModel = getDataModel();
   const [productList, setProductList] = useState(dataModel.getProductListCopy());
   console.log(productList)
+  console.log(route.params);
 
   // const [checked, setChecked] = useState(false)
 
@@ -37,6 +38,13 @@ function HomeScreen({ navigation }) {
         }
         }
       /> */}
+
+        <Button
+            title="Messages"
+            onPress={()=>{
+            navigation.navigate("Messages", route.params);
+            }}
+        />
         <FlatList
           contentContainerStyle={styles.listContentContainer}
           data={productList}

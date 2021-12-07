@@ -2,7 +2,7 @@ import { firebaseConfig } from './Secrets';
 import { initializeApp, getApps } from 'firebase/app';
 import {
     initializeFirestore, collection, query, orderBy, limit,
-    doc, getDoc, getDocs, updateDoc, addDoc, deleteDoc, onSnapshot
+    doc, getDoc, getDocs, updateDoc, addDoc, deleteDoc, onSnapshot, setDoc
 } from "firebase/firestore";
 
 
@@ -20,6 +20,7 @@ class DataModel {
         //Users
         this.users = [];
         this.userListeners = [];
+        this.chatListeners = [];
 
 
         //Furniture
@@ -252,6 +253,15 @@ class DataModel {
         return this.users
     }
 
+    getUserForID(id) {
+        for (let u of this.users) {
+            if (u.key === id) {
+            return u;
+            }
+        }
+        return null;
+    }
+
     async createUser(authUser) {
         let newUser = {
             displayName: authUser.providerData[0].displayName,
@@ -277,6 +287,74 @@ class DataModel {
         let newUser = await this.createUser(authUser);
         return newUser;
     }
+
+    /**********************************************
+     * Chat Messages
+    ************************************************/
+
+   addChatListener(chatId, callbackFunction) {
+    const listenerId = Date.now();
+    const listener = {
+      id: listenerId,
+      chatId: chatId,
+      callback: callbackFunction
+    }
+    this.chatListeners.push(listener);
+    let chatDocRef = doc(db, 'chats', chatId);
+    let messagesRef = collection(chatDocRef, 'messages');
+    let messageQuery = query(messagesRef, orderBy('timestamp', 'desc'));
+
+    onSnapshot(messageQuery, (qSnap) => {
+      if (qSnap.empty) return;
+      let allMessages = [];
+      qSnap.forEach((docSnap) => {
+        let message = docSnap.data();
+        message.key = docSnap.id;
+        message.author = this.getUserForID(message.authorId); // convert Id to user object
+        message.timestamp = message.timestamp.toDate(); // convert Firebase timestamp to JS Date
+        allMessages.push(message);
+      });
+      this.notifyChatListeners(chatId, allMessages);
+    });
+
+    return listenerId;
+  }
+
+  removeChatListener(listenerId) {
+    let idx = this.chatListeners.findIndex((elem)=>elem.listenerId===listenerId);
+    this.chatListeners.splice(idx, 1);
+  }
+
+  notifyChatListeners(chatId, allMessages) {
+    for (let cl of this.chatListeners) {
+      if (cl.chatId === chatId) {
+        cl.callback(allMessages);
+      }
+    }
+  }
+
+  getChatIdForUserIds(user1Id, user2Id) {
+    let userPair = [user1Id, user2Id];
+    userPair.sort();
+    return (userPair[0] + '-' + userPair[1]);
+  }
+
+  addChatMessage(chatId, messageContents) {
+
+    // construct a reference to the chat's Firestore doc
+    let chatDocRef = doc(db, 'chats', chatId);
+
+    // create chat doc if it doesn't exist, otherwise update participants
+    let participants = messageContents.recipients;
+    participants.push(messageContents.authorId);
+    setDoc(chatDocRef, {participants: participants});
+
+    // add the message to the chat doc's 'messages' collection
+    let messagesRef = collection(chatDocRef, 'messages');
+    addDoc(messagesRef, messageContents); // let onSnapshot() do it's work!
+  }  
+
+
 }
 
 let theDataModel;
