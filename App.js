@@ -6,8 +6,8 @@ import DetailsScreen from './detailscreen';
 import Login from './login';
 import MessageScreen from './messagescreen';
 import ArScreen from './arscreen';
-import DisplayScreen from './DisplayScreen';
-import { ChatScreen } from './ChatScreen';
+import DisplayScreen from './displayscreen';
+import { ChatScreen } from './chatscreen';
 
 const Stack = createNativeStackNavigator();
 
