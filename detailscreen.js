@@ -8,7 +8,7 @@ function DetailsScreen({navigation, route}) {
 
   let item = route.params ? route.params.item : null;
   let editMode = (item != null);
-  const [inputText, setInputText] = useState(item? item.name : '');
+  const [name, setName] = useState(item? item.name : '');
   const [description, setDescription] = useState(item? item.description : '');
   const [isChecked, setIsChecked] = useState(item ? item.available: false);
   const [price, setPrice] = useState(item? item.price : '');
@@ -19,12 +19,12 @@ function DetailsScreen({navigation, route}) {
   return (
     <View style={styles.container}>
       <View style={styles.inputArea}>
-        <Text style={styles.inputLabel}>Item Name:</Text>
+        <Text style={styles.inputLabel}>Title:</Text>
         <Input 
           containerStyle={styles.inputBox} 
           placeholder="Item title..."
-          onChangeText={(text)=>setInputText(text)}
-          value={inputText}
+          onChangeText={(text)=>setName(text)}
+          value={name}
         />
       </View>  
       <View style={styles.inputArea}>
@@ -46,10 +46,10 @@ function DetailsScreen({navigation, route}) {
         />
       </View>
       <View style={styles.inputArea}>
-        <Text style={styles.inputLabel}>Image:</Text>
+        <Text style={styles.inputLabel}>Image URL:</Text>
         <Input 
           containerStyle={styles.inputBox} 
-          placeholder="Item image..."
+          placeholder="Item image URL..."
           onChangeText={(text)=>setImage(text)}
           value={image}
         />
@@ -77,7 +77,7 @@ function DetailsScreen({navigation, route}) {
           title={editMode ? "Save" : "Add Item"}
           onPress={()=>{
             if (editMode) {
-              item.name = inputText;
+              item.name = name;
               item.isChecked = isChecked;
               item.description = description;
               item.price = price;
@@ -86,7 +86,7 @@ function DetailsScreen({navigation, route}) {
               console.log('new data model: ', dataModel.getProductList());
             } else {
               // update data model
-              dataModel.addItem({name: inputText, description: description, price: price, image: image, isChecked: isChecked}); // let the data model add the key
+              dataModel.addItem({name: name, description: description, price: price, image: image, isChecked: isChecked}); // let the data model add the key
               //console.log('new data model: ', dataModel.getProdcutList());
             }
             navigation.navigate("Home");
