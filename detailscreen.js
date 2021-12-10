@@ -11,7 +11,7 @@ function DetailsScreen({navigation, route}) {
   let editMode = (item != null);
   const [title, setTitle] = useState(item? item.title : '');
   const [description, setDescription] = useState(item? item.description : '');
-  const [isChecked, setIsChecked] = useState(item ? item.available: false);
+  const [isChecked, setIsChecked] = useState(true);
   const [price, setPrice] = useState(item? item.price : '');
   const [image, setImage] = useState(null);
   
@@ -126,7 +126,7 @@ function DetailsScreen({navigation, route}) {
           onPress={()=>{
             if (editMode) {
               item.title = title;
-              item.isChecked = isChecked;
+              item.availability = isChecked;
               item.description = description;
               item.price = price;
               item.image = image;
@@ -134,7 +134,7 @@ function DetailsScreen({navigation, route}) {
               console.log('new data model: ', dataModel.getProductList());
             } else {
               // update data model
-              dataModel.addItem({title: title, description: description, price: price, image: image, isChecked: isChecked}); // let the data model add the key
+              dataModel.addItem({title: title, description: description, price: price, image: image, availability: isChecked}); // let the data model add the key
               //console.log('new data model: ', dataModel.getProdcutList());
             }
             navigation.navigate("Home");
