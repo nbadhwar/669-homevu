@@ -1,20 +1,50 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Input, Button, CheckBox } from 'react-native-elements';
-import { FlatList, StyleSheet, Text, TextInput, View, Pressable, TouchableOpacity } from 'react-native';
+import { Image, FlatList, StyleSheet, Text, TextInput, View, Pressable, TouchableOpacity } from 'react-native';
 import { getDataModel } from './DataModel';
-
+import { AntDesign } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
 
 function DetailsScreen({navigation, route}) {
 
   let item = route.params ? route.params.item : null;
   let editMode = (item != null);
-  const [name, setName] = useState(item? item.name : '');
+  const [title, setTitle] = useState(item? item.title : '');
   const [description, setDescription] = useState(item? item.description : '');
   const [isChecked, setIsChecked] = useState(item ? item.available: false);
   const [price, setPrice] = useState(item? item.price : '');
-  const [image, setImage] = useState(item? item.image : "https://m.media-amazon.com/images/I/51JyYu2pa6L._AC_SL1000_.jpg");
+  const [image, setImage] = useState(null);
   
   const dataModel = getDataModel();
+
+  useEffect(() => {
+    checkForCameraRollPermission()
+  }, []);
+
+  const addImage = async () => {
+    let _image = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4,3],
+      quality: 1,
+    });
+
+    console.log("THIS IS THE OBJECT: " + JSON.stringify(_image));
+
+    if (!_image.cancelled) {
+      setImage(_image.uri);
+    }
+  };
+
+  const  checkForCameraRollPermission=async()=>{
+    const { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      alert("Please grant camera roll permissions inside your system's settings");
+    }else{
+      console.log('Media Permissions are granted')
+    }
+  
+}
 
   return (
     <View style={styles.container}>
@@ -23,8 +53,8 @@ function DetailsScreen({navigation, route}) {
         <Input 
           containerStyle={styles.inputBox} 
           placeholder="Item title..."
-          onChangeText={(text)=>setName(text)}
-          value={name}
+          onChangeText={(text)=>setTitle(text)}
+          value={title}
         />
       </View>  
       <View style={styles.inputArea}>
@@ -45,7 +75,7 @@ function DetailsScreen({navigation, route}) {
           value={price}
         />
       </View>
-      <View style={styles.inputArea}>
+      {/* <View style={styles.inputArea}>
         <Text style={styles.inputLabel}>Image URL:</Text>
         <Input 
           containerStyle={styles.inputBox} 
@@ -53,7 +83,25 @@ function DetailsScreen({navigation, route}) {
           onChangeText={(text)=>setImage(text)}
           value={image}
         />
+      </View> */}
+      {/* <View>
+        <UploadImage/>
+        <Text style={{marginVertical:20,fontSize:16}}>Upload product image</Text>
+      </View>     */}
+  
+        <View style={imageUploaderStyles.container}>
+          {
+              image  && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
+          }
+              
+              <View style={imageUploaderStyles.uploadBtnContainer}>
+                  <TouchableOpacity onPress={addImage} style={imageUploaderStyles.uploadBtn} >
+                      <Text>{image ? 'Edit' : 'Upload'} Image</Text>
+                      <AntDesign title="camera" size={20} color="black" />
+                  </TouchableOpacity>
+              </View>
       </View>
+
       <View>      
         <CheckBox
           title= "Available"
@@ -62,7 +110,7 @@ function DetailsScreen({navigation, route}) {
             setIsChecked(!isChecked);
           }}      
         />
-      </View>      
+      </View>  
 
       <View style={styles.buttonArea}>
         <Button
@@ -77,7 +125,7 @@ function DetailsScreen({navigation, route}) {
           title={editMode ? "Save" : "Add Item"}
           onPress={()=>{
             if (editMode) {
-              item.name = name;
+              item.title = title;
               item.isChecked = isChecked;
               item.description = description;
               item.price = price;
@@ -86,7 +134,7 @@ function DetailsScreen({navigation, route}) {
               console.log('new data model: ', dataModel.getProductList());
             } else {
               // update data model
-              dataModel.addItem({name: name, description: description, price: price, image: image, isChecked: isChecked}); // let the data model add the key
+              dataModel.addItem({title: title, description: description, price: price, image: image, isChecked: isChecked}); // let the data model add the key
               //console.log('new data model: ', dataModel.getProdcutList());
             }
             navigation.navigate("Home");
@@ -97,6 +145,30 @@ function DetailsScreen({navigation, route}) {
   );
   
 }
+
+const imageUploaderStyles=StyleSheet.create({
+  container:{
+      elevation:2,
+      height:200,
+      width:200, 
+      backgroundColor:'#efefef',
+      position:'relative',
+  },
+  uploadBtnContainer:{
+      opacity:0.7,
+      position:'absolute',
+      right:0,
+      bottom:0,
+      backgroundColor:'lightgrey',
+      width:'100%',
+      height:'25%',
+  },
+  uploadBtn:{
+      display:'flex',
+      alignItems:"center",
+      justifyContent:'center'
+  }
+})
 
 const styles = StyleSheet.create({
   container: {
@@ -110,7 +182,8 @@ const styles = StyleSheet.create({
     flex: 0.1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: 10 
   },
   inputLabel: {
     flex: 0.2,
