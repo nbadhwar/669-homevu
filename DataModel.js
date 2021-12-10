@@ -116,15 +116,6 @@ class DataModel {
             item.title = 'untitled item'
         }
 
-        //set it to a default current user - test@example.com / 123456
-        if (item.user_id == null) {
-            item.user_id = "fpgcb5WYYmQw1o67ZqQ3pA5nmtF2"
-        }
-
-        //set it to a default current user display name - test@example.com /123456
-        if (item.sellerName == null) {
-            item.sellerName = "alice"
-        }
         //Maybe a dropdown for furniture types in DetailScreen
         if (item.type == null) {
             item.type = 'furniture'
