@@ -53,7 +53,17 @@ function DisplayScreen({ navigation, route }) {
                     </TouchableOpacity>
                 </View> :
                 <View>
-                    {/* TODO: Add Message Screen Button */}
+                    <TouchableOpacity
+                        style={styles.userListItem}
+                        onPress={() => {
+                            navigation.navigate('Chat', {
+                                currentUserId: currentUser.key,
+                                otherUserId: item.key
+                            });
+                        }}
+                    >
+                        <Text style={styles.userListItemText}>{item.displayName}</Text>
+                    </TouchableOpacity>
                 </View>
             }
             <View>
