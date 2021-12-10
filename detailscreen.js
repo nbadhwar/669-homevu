@@ -15,6 +15,8 @@ function DetailsScreen({navigation, route}) {
   const [price, setPrice] = useState(item? item.price : '');
   const [image, setImage] = useState(null);
   
+  const [currentUser, setCurrentUser] = useState(route.params ? route.params.currentUser : null)
+
   const dataModel = getDataModel();
 
   useEffect(() => {
@@ -125,6 +127,9 @@ function DetailsScreen({navigation, route}) {
           title={editMode ? "Save" : "Add Item"}
           onPress={()=>{
             if (editMode) {
+              item.user_id = currentUser.key
+              item.sellerName = currentUser.displayName
+              console.log(item.user_id + " : " + item.sellerName)
               item.title = title;
               item.isChecked = isChecked;
               item.description = description;
@@ -134,7 +139,7 @@ function DetailsScreen({navigation, route}) {
               console.log('new data model: ', dataModel.getProductList());
             } else {
               // update data model
-              dataModel.addItem({title: title, description: description, price: price, image: image, isChecked: isChecked}); // let the data model add the key
+              dataModel.addItem({ user_id: currentUser.key, sellerName: currentUser.displayName, title: title, description: description, price: price, image: image, isChecked: isChecked}); // let the data model add the key
               //console.log('new data model: ', dataModel.getProdcutList());
             }
             navigation.navigate("Home");
@@ -196,7 +201,7 @@ const styles = StyleSheet.create({
     flex: 0.8,
   },
   buttonArea: {
-    flex: 0.3,
+    flex: 0.1,
     flexDirection: 'row',
     paddingTop: 30,
     justifyContent: 'space-between',
