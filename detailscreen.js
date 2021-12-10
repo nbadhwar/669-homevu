@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import { Input, Button, CheckBox } from 'react-native-elements';
 import { Image, FlatList, StyleSheet, Text, TextInput, View, Pressable, TouchableOpacity } from 'react-native';
-import { getDataModel } from './DataModel';
+import { getDataModel, homevuColors } from './DataModel';
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import { color } from 'react-native-elements/dist/helpers';
 
 function DetailsScreen({navigation, route}) {
 
@@ -184,24 +185,26 @@ const styles = StyleSheet.create({
     padding: 30
   },
   inputArea: {
-    flex: 0.1,
+    flex: 0.2,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
     marginBottom: 10 
   },
   inputLabel: {
-    flex: 0.2,
+    width: 120,
     textAlign: 'right',
     fontSize: 18,
     paddingRight: 10,
-    paddingBottom: 10
+    paddingBottom: 10,
+    color: homevuColors.redShade,
+    fontWeight: 'bold'
   },
   inputBox: {
     flex: 0.8,
   },
   buttonArea: {
-    flex: 0.1,
+    flex: 0.3,
     flexDirection: 'row',
     paddingTop: 30,
     justifyContent: 'space-between',
@@ -210,7 +213,7 @@ const styles = StyleSheet.create({
     //backgroundColor: 'tan'
   },
   button: {
-    width: '40%'
+    width: '45%'
   }
 });
 
