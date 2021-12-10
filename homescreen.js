@@ -19,12 +19,6 @@ function HomeScreen({ navigation, route }) {
   return (
     <View><View style={styles.container}>
       <View style={styles.listContainer}>
-        <Button
-          title="Messages"
-          onPress={() => {
-            navigation.navigate("Messages", {currentUser: currentUser});
-          }}
-        />
         <FlatList
           contentContainerStyle={styles.listContentContainer}
           data={productList}
@@ -34,11 +28,15 @@ function HomeScreen({ navigation, route }) {
                 <TouchableOpacity
                   onPress={() => navigation.navigate('Display', { item: item, currentUser: currentUser })}>
                   <View style={[styles.listItem, styles.shadowProp]}>
-                    <Image style={styles.listItemImage}
-                      source={{ uri: item.image }} />
-                    <Text style={styles.listItemTitle}>{item.title}</Text>
-                    <View style={styles.listItemDetails}>
-                      <Text style={styles.listItemPrice}>${item.price}</Text>
+                    <View style={styles.listItemImageContainer}>
+                      <Image style={styles.listItemImage}
+                        source={{ uri: item.image }} />
+                    </View>
+                    <View style={styles.listItemDetailsContainer}>
+                      <Text style={styles.listItemTitle}>{item.title}</Text>
+                      <View style={styles.listItemDetails}>
+                        <Text style={styles.listItemPrice}>${item.price}</Text>
+                      </View>
                     </View>
                   </View>
                 </TouchableOpacity>
@@ -59,6 +57,19 @@ function HomeScreen({ navigation, route }) {
           color='white'
         />
       </TouchableOpacity>
+
+      <TouchableOpacity
+        style={[styles.listItemMessageButton, styles.buttonShadowProp]}
+        onPress={() => {
+          navigation.navigate("Messages", { currentUser: currentUser });
+        }}>
+        <Icon
+          name='message'
+          type='material-icons'
+          color='white'
+        />
+      </TouchableOpacity>
+
     </View >
   );
 }
@@ -81,7 +92,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     flexDirection: 'column',
-    padding: 15,
     marginHorizontal: 10,
     marginVertical: 5,
     borderRadius: 5,
@@ -92,12 +102,19 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 6,
   },
+  listItemImageContainer: {
+  },
+  listItemDetailsContainer: {
+    padding: 15
+  },
   listItemImage: {
     alignSelf: 'center',
     flex: 0.7,
-    width: 200,
-    height: 200,
-    resizeMode: 'contain'
+    width: '100%',
+    height: 250,
+    borderTopRightRadius: 5,
+    borderTopLeftRadius: 5,
+    resizeMode: 'cover'
   },
   listItemTitle: {
     flex: 0.7,
@@ -128,9 +145,25 @@ const styles = StyleSheet.create({
     marginHorizontal: '5%',
     marginVertical: '10%',
     backgroundColor: homevuColors.green,
+    shadowColor: homevuColors.greenShade,
+  },
+  listItemMessageButton: {
+    position: 'fixed',
+    right: 0,
+    bottom: 0,
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 100,
+    marginHorizontal: '5%',
+    marginVertical: '30%',
+    backgroundColor: homevuColors.blue,
+    shadowColor: homevuColors.blueShade,
+
   },
   buttonShadowProp: {
-    shadowColor: homevuColors.greenShade,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.6,
     shadowRadius: 10,
