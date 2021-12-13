@@ -53,17 +53,17 @@ function DisplayScreen({ navigation, route }) {
                         <Text style={[styles.displayButtonText]}>Delete Item</Text>
                     </TouchableOpacity>
                 </View> :
-                <View>
+                <View style={styles.displayButtonsContainer}>
                     <TouchableOpacity
                         style={styles.userListItem}
                         onPress={() => {
                             navigation.navigate('Chat', {
                                 currentUserId: currentUser.key,
-                                otherUserId: item.key
+                                otherUserId: item.user_id
                             });
                         }}
                     >
-                        <Text style={styles.userListItemText}>{item.displayName}</Text>
+                        <Text style={styles.displayContactButton}>Contact Seller</Text>
                     </TouchableOpacity>
                 </View>
             }
@@ -137,6 +137,16 @@ const styles = StyleSheet.create({
         backgroundColor: homevuColors.red,
         alignItems: 'center',
         justifyContent: 'center',
+        padding: 10,
+        borderRadius: 5,
+    },
+    displayContactButton: {
+        flex: 0.3,
+        flexDirection: 'row',
+        color: 'white',
+        backgroundColor: homevuColors.blue,
+        alignItems: 'center',
+        justifyContent: 'space-around',
         padding: 10,
         borderRadius: 5,
     },
