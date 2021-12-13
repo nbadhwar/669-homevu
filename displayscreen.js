@@ -15,13 +15,14 @@ function DisplayScreen({ navigation, route }) {
             <View>
                 <Image
                     style={styles.displayItemImage}
-                    source={{ uri: item.image }} />
+                    source={{ uri: item.image }}
+                     />
             </View>
             <View style={styles.displayContainer}>
                 <Text style={styles.displayItemTitle}>{item.title}</Text>
+                <Text style={styles.displayItemPrice}>${item.price}</Text>
                 <Text style={styles.displayItemDescription}>{item.description}</Text>
-                <Text style={styles.displayItemPrice}>{item.price}</Text>
-                <Text style={styles.displayItemDescription}>Sold by {item.sellerName ? item.sellerName : "Unknown"}</Text>
+                <Text style={styles.displayItemSeller}>Sold by {item.sellerName ? item.sellerName : "Unknown"}</Text>
             </View>
             {(currentUser.key === item.user_id) ?
                 <View style={styles.displayButtonsContainer}>
@@ -53,7 +54,17 @@ function DisplayScreen({ navigation, route }) {
                     </TouchableOpacity>
                 </View> :
                 <View>
-                    {/* TODO: Add Message Screen Button */}
+                    <TouchableOpacity
+                        style={styles.userListItem}
+                        onPress={() => {
+                            navigation.navigate('Chat', {
+                                currentUserId: currentUser.key,
+                                otherUserId: item.key
+                            });
+                        }}
+                    >
+                        <Text style={styles.userListItemText}>{item.displayName}</Text>
+                    </TouchableOpacity>
                 </View>
             }
             <View>
@@ -68,29 +79,39 @@ const styles = StyleSheet.create({
         flex: 1
     },
     displayContainer: {
-        marginHorizontal: 50,
-        flex: 0.3,
+        marginHorizontal: 40,
+        flex: 0.4,
     },
     displayItemImage: {
         alignSelf: 'center',
         flex: 0.7,
         width: '100%',
-        height: 200,
-        resizeMode: 'contain'
+        height: 250,
+        resizeMode: 'cover'
     },
     displayItemTitle: {
         flex: 0.7,
-        fontSize: 18,
+        fontSize: 24,
+        paddingTop: 12,
         fontWeight: 'bold'
     },
     displayItemDescription: {
         flex: 0.7,
-        fontSize: 14
+        fontSize: 14,
+        lineHeight: 24,
+    },
+    displayItemSeller: {
+        flex: 0.7,
+        fontStyle: 'italic',
+        fontSize: 14,
+        lineHeight: 24,
+        marginTop: 12,
+        color: homevuColors.redShade
     },
     displayItemPrice: {
-        marginTop: 2,
+        marginVertical: 12,
         flex: 0.7,
-        fontSize: 12,
+        fontSize: 18,
         fontWeight: 'bold',
         color: 'green'
     },

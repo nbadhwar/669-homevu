@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import { Input, Button, CheckBox } from 'react-native-elements';
 import { Image, FlatList, StyleSheet, Text, TextInput, View, Pressable, TouchableOpacity } from 'react-native';
-import { getDataModel } from './DataModel';
+import { getDataModel, homevuColors } from './DataModel';
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import { color } from 'react-native-elements/dist/helpers';
 
 function DetailsScreen({navigation, route}) {
 
@@ -15,6 +16,8 @@ function DetailsScreen({navigation, route}) {
   const [price, setPrice] = useState(item? item.price : '');
   const [image, setImage] = useState(null);
   
+  const [currentUser, setCurrentUser] = useState(route.params ? route.params.currentUser : null)
+
   const dataModel = getDataModel();
 
   useEffect(() => {
@@ -125,6 +128,9 @@ function DetailsScreen({navigation, route}) {
           title={editMode ? "Save" : "Add Item"}
           onPress={()=>{
             if (editMode) {
+              item.user_id = currentUser.key
+              item.sellerName = currentUser.displayName
+              console.log(item.user_id + " : " + item.sellerName)
               item.title = title;
               item.availability = isChecked;
               item.description = description;
@@ -134,7 +140,11 @@ function DetailsScreen({navigation, route}) {
               console.log('new data model: ', dataModel.getProductList());
             } else {
               // update data model
+<<<<<<< HEAD
               dataModel.addItem({title: title, description: description, price: price, image: image, availability: isChecked}); // let the data model add the key
+=======
+              dataModel.addItem({ user_id: currentUser.key, sellerName: currentUser.displayName, title: title, description: description, price: price, image: image, isChecked: isChecked}); // let the data model add the key
+>>>>>>> d8da197acddc12ecf9baffb933e8dc49db3b14f9
               //console.log('new data model: ', dataModel.getProdcutList());
             }
             navigation.navigate("Home");
@@ -179,24 +189,26 @@ const styles = StyleSheet.create({
     padding: 30
   },
   inputArea: {
-    flex: 0.1,
+    flex: 0.2,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
     marginBottom: 10 
   },
   inputLabel: {
-    flex: 0.2,
+    width: 120,
     textAlign: 'right',
     fontSize: 18,
     paddingRight: 10,
-    paddingBottom: 10
+    paddingBottom: 10,
+    color: homevuColors.redShade,
+    fontWeight: 'bold'
   },
   inputBox: {
     flex: 0.8,
   },
   buttonArea: {
-    flex: 0.1,
+    flex: 0.3,
     flexDirection: 'row',
     paddingTop: 30,
     justifyContent: 'space-between',
@@ -205,7 +217,7 @@ const styles = StyleSheet.create({
     //backgroundColor: 'tan'
   },
   button: {
-    width: '40%'
+    width: '45%'
   }
 });
 

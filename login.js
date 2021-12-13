@@ -120,6 +120,8 @@ function Login({ navigation }) {
                   const authUser = credential.user;
                   const user = await dataModel.getUserForAuthUser(authUser);
                   navigation.navigate('Home', { currentUser: user })
+                  console.log('passing user from login.js ' + user)
+
                 } catch (error) {
                   Alert.alert(
                     "Login Error",
@@ -137,6 +139,7 @@ function Login({ navigation }) {
                   await updateProfile(authUser, { displayName: displayName });
                   const user = await dataModel.getUserForAuthUser(authUser);
                   navigation.navigate('Home', { currentUser: user })
+                  console.log('passing user from login.js ' + user)
                 } catch (error) {
                   Alert.alert(
                     "Sign Up Error",
