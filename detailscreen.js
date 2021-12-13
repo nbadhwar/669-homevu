@@ -140,11 +140,7 @@ function DetailsScreen({navigation, route}) {
               console.log('new data model: ', dataModel.getProductList());
             } else {
               // update data model
-<<<<<<< HEAD
-              dataModel.addItem({title: title, description: description, price: price, image: image, availability: isChecked}); // let the data model add the key
-=======
               dataModel.addItem({ user_id: currentUser.key, sellerName: currentUser.displayName, title: title, description: description, price: price, image: image, isChecked: isChecked}); // let the data model add the key
->>>>>>> d8da197acddc12ecf9baffb933e8dc49db3b14f9
               //console.log('new data model: ', dataModel.getProdcutList());
             }
             navigation.navigate("Home");
