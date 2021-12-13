@@ -14,7 +14,7 @@ function DetailsScreen({navigation, route}) {
   const [description, setDescription] = useState(item? item.description : '');
   const [isChecked, setIsChecked] = useState(true);
   const [price, setPrice] = useState(item? item.price : '');
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState(item? item.image: null);
   
   const [currentUser, setCurrentUser] = useState(route.params ? route.params.currentUser : null)
 
