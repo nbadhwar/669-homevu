@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { SearchBar, Input, Icon, Button } from 'react-native-elements';
+import { ListItem, SearchBar, Input, Icon, Button } from 'react-native-elements';
 import { Image, FlatList, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { getDataModel, homevuColors } from './DataModel';
+import { BottomSheet } from 'react-native-elements/dist/bottomSheet/BottomSheet';
 
 function HomeScreen({ navigation, route }) {
 
@@ -15,6 +16,12 @@ function HomeScreen({ navigation, route }) {
   const [filteredList, setFilteredList] = useState(dataModel.getProductListCopy());
   const [search, setSearch] = useState('')
   console.log(search)
+
+  /**
+   * Bottom Sheet for Filters
+   */
+  const [isVisible, setIsVisible] = useState(false);
+
 
   useEffect(() => {
     dataModel.subscribeToUpdates(() => {
@@ -38,10 +45,36 @@ function HomeScreen({ navigation, route }) {
     }
   }
 
+  /**
+   * List of Items in 
+   */
+  const list = [
+    { title: 'List Item 1' },
+    { title: 'List Item 2' },
+    {
+      title: 'Cancel',
+      containerStyle: { backgroundColor: homevuColors.redShade },
+      titleStyle: { color: 'white' },
+      onPress: () => setIsVisible(false),
+    },
+  ];
+
   return (
     < View style={styles.mainContainer} >
+      <BottomSheet
+        isVisible={isVisible}
+        containerStyle={{ backgroundColor:'rgba(0.5, 0.25, 0, 0.2)'}}>
+        {list.map((l, i) => (
+          <ListItem key={i} containerStyle={l.containerStyle} onPress={l.onPress}>
+            <ListItem.Content>
+              <ListItem.Title style={l.titleStyle}>{l.title}</ListItem.Title>
+            </ListItem.Content>
+          </ListItem>
+        ))}
+      </BottomSheet>
       <View style={styles.searchContainer}>
         <SearchBar
+          containerStyle={styles.searchBar}
           placeholder="Search Item"
           platform="android"
           lightTheme={true}
@@ -103,6 +136,18 @@ function HomeScreen({ navigation, route }) {
         />
       </TouchableOpacity>
 
+      <TouchableOpacity
+        style={[styles.listItemFilterButton, styles.buttonShadowProp]}
+        onPress={() => {
+          setIsVisible(true)
+        }}>
+        <Icon
+          name='filter-list'
+          type='material-icons'
+          color='white'
+        />
+      </TouchableOpacity>
+
     </View >
   );
 }
@@ -117,7 +162,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   listContainer: {
-    padding: 30,
+    paddingHorizontal: 30,
+    paddingBottom: 10,
     width: '100%',
   },
   listContentContainer: {
@@ -165,7 +211,7 @@ const styles = StyleSheet.create({
     flex: 0.7,
     fontSize: 12,
     fontWeight: 'bold',
-    color: 'green'
+    color: homevuColors.greenShade
   },
   listItemAddButton: {
     position: 'fixed',
@@ -198,6 +244,22 @@ const styles = StyleSheet.create({
     shadowColor: homevuColors.blueShade,
 
   },
+  listItemFilterButton: {
+    position: 'fixed',
+    right: 0,
+    bottom: 0,
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 100,
+    marginHorizontal: '5%',
+    marginVertical: '50%',
+    backgroundColor: homevuColors.yellow,
+    shadowColor: homevuColors.yellowShade,
+
+  },
   buttonShadowProp: {
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.6,
@@ -205,6 +267,9 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     marginHorizontal: 20,
+    backgroundColor: homevuColors.blueTint
+  },
+  searchBar: {
   }
 });
 
