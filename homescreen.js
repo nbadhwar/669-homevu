@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, Button } from 'react-native-elements';
+import { SearchBar, Input, Icon, Button } from 'react-native-elements';
 import { Image, FlatList, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { getDataModel, homevuColors } from './DataModel';
 
@@ -8,7 +8,13 @@ function HomeScreen({ navigation, route }) {
   const dataModel = getDataModel();
   const [productList, setProductList] = useState(dataModel.getProductListCopy());
   const [currentUser, setCurrentUser] = useState(route.params ? route.params.currentUser : null)
-  console.log(currentUser)
+
+  /**
+   * Search Reference: https://snack.expo.dev/embedded/@aboutreact/example-of-search-bar-in-react-native?iframeId=ewbug1wk1e&preview=true&platform=ios&theme=dark
+   */
+  const [filteredList, setFilteredList] = useState(dataModel.getProductListCopy());
+  const [search, setSearch] = useState('')
+  console.log(search)
 
   useEffect(() => {
     dataModel.subscribeToUpdates(() => {
@@ -16,36 +22,63 @@ function HomeScreen({ navigation, route }) {
     });
   }, []);
 
+  const searchResults = (text) => {
+    if (text) {
+      const searchData = productList.filter(function (item) {
+        const itemData = item.title ? item.title.toUpperCase() : ''.toUpperCase()
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      })
+      setFilteredList(searchData)
+      setSearch(text)
+    }
+    else {
+      setFilteredList(dataModel.getProductListCopy())
+      setSearch(text)
+    }
+  }
+
   return (
-    <View><View style={styles.container}>
-      <View style={styles.listContainer}>
-        <FlatList
-          contentContainerStyle={styles.listContentContainer}
-          data={productList}
-          renderItem={({ item }) => {
-            return (
-              <View>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('Display', { item: item, currentUser: currentUser })}>
-                  <View style={[styles.listItem, styles.shadowProp]}>
-                    <View style={styles.listItemImageContainer}>
-                      <Image style={styles.listItemImage}
-                        source={{ uri: item.image }} />
-                    </View>
-                    <View style={styles.listItemDetailsContainer}>
-                      <Text style={styles.listItemTitle}>{item.title}</Text>
-                      <View style={styles.listItemDetails}>
-                        <Text style={styles.listItemPrice}>${item.price}</Text>
-                      </View>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            );
-          }}
+    < View style={styles.mainContainer} >
+      <View style={styles.searchContainer}>
+        <SearchBar
+          placeholder="Search Item"
+          platform="android"
+          lightTheme={true}
+          round={true}
+          onChangeText={(text) => searchResults(text)}
+          value={search}
         />
       </View>
-    </View >
+      <View style={styles.container}>
+        <View style={styles.listContainer}>
+          <FlatList
+            contentContainerStyle={styles.listContentContainer}
+            data={search ? filteredList : productList}
+            renderItem={({ item }) => {
+              return (
+                <View>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('Display', { item: item, currentUser: currentUser })}>
+                    <View style={[styles.listItem, styles.shadowProp]}>
+                      <View style={styles.listItemImageContainer}>
+                        <Image style={styles.listItemImage}
+                          source={{ uri: item.image }} />
+                      </View>
+                      <View style={styles.listItemDetailsContainer}>
+                        <Text style={styles.listItemTitle}>{item.title}</Text>
+                        <View style={styles.listItemDetails}>
+                          <Text style={styles.listItemPrice}>${item.price}</Text>
+                        </View>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              );
+            }}
+          />
+        </View>
+      </View >
       <TouchableOpacity
         style={[styles.listItemAddButton, styles.buttonShadowProp]}
         onPress={() => {
@@ -75,9 +108,11 @@ function HomeScreen({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    backgroundColor: 'white'
+  },
   container: {
     backgroundColor: 'white',
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
@@ -168,6 +203,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.6,
     shadowRadius: 10,
   },
+  searchContainer: {
+    marginHorizontal: 20,
+  }
 });
 
 export default HomeScreen;
