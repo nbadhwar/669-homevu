@@ -63,7 +63,7 @@ function HomeScreen({ navigation, route }) {
     < View style={styles.mainContainer} >
       <BottomSheet
         isVisible={isVisible}
-        containerStyle={{ backgroundColor:'rgba(0.5, 0.25, 0, 0.2)'}}>
+        containerStyle={{ backgroundColor: 'rgba(0.5, 0.25, 0, 0.2)' }}>
         {list.map((l, i) => (
           <ListItem key={i} containerStyle={l.containerStyle} onPress={l.onPress}>
             <ListItem.Content>
@@ -82,6 +82,19 @@ function HomeScreen({ navigation, route }) {
           onChangeText={(text) => searchResults(text)}
           value={search}
         />
+        <TouchableOpacity
+          style={[styles.listItemFilterButton]}
+          onPress={() => {
+            setIsVisible(true)
+          }}>
+          <Icon
+            size={32}
+            name='filter-list'
+            type='material-icons'
+            color={homevuColors.red}
+
+          />
+        </TouchableOpacity>
       </View>
       <View style={styles.container}>
         <View style={styles.listContainer}>
@@ -112,42 +125,59 @@ function HomeScreen({ navigation, route }) {
           />
         </View>
       </View >
-      <TouchableOpacity
-        style={[styles.listItemAddButton, styles.buttonShadowProp]}
-        onPress={() => {
-          navigation.navigate("Details", { currentUser: currentUser });
-        }}>
-        <Icon
-          name='add'
-          type='material-icons'
-          color='white'
-        />
-      </TouchableOpacity>
+      <View style={[styles.menuContainer, styles.shadowProp]}>
+        <TouchableOpacity
+          style={[styles.listItemAddButton]}
+          onPress={() => {
+            navigation.navigate("Home", { currentUser: currentUser });
+          }}>
+          <Icon
+            size={32}
+            name='home'
+            type='material-icons'
+            color={homevuColors.red}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.listItemAddButton]}
+          onPress={() => {
+            navigation.navigate("Details", { currentUser: currentUser });
+          }}>
+          <Icon
+            size={32}
+            name='add-circle'
+            type='material-icons'
+            color={homevuColors.red}
+          />
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={[styles.listItemMessageButton, styles.buttonShadowProp]}
-        onPress={() => {
-          navigation.navigate("Messages", { currentUser: currentUser });
-        }}>
-        <Icon
-          name='message'
-          type='material-icons'
-          color='white'
-        />
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.listItemMessageButton]}
+          onPress={() => {
+            navigation.navigate("Messages", { currentUser: currentUser });
+          }}>
+          <Icon
+            size={32}
+            name='message'
+            type='material-icons'
+            color={homevuColors.red}
+          />
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={[styles.listItemFilterButton, styles.buttonShadowProp]}
-        onPress={() => {
-          setIsVisible(true)
-        }}>
-        <Icon
-          name='filter-list'
-          type='material-icons'
-          color='white'
-        />
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.listItemFilterButton]}
+          onPress={() => {
+            //TODO: Navigate to Profile Page
+          }}>
+          <Icon
+            size={32}
+            name='person'
+            type='material-icons'
+            color={homevuColors.red}
 
+          />
+        </TouchableOpacity>
+      </View>
     </View >
   );
 }
@@ -213,63 +243,30 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: homevuColors.greenShade
   },
-  listItemAddButton: {
-    position: 'fixed',
-    right: 0,
-    bottom: 0,
-    width: 50,
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10,
-    borderRadius: 100,
-    marginHorizontal: '5%',
-    marginVertical: '10%',
-    backgroundColor: homevuColors.green,
-    shadowColor: homevuColors.greenShade,
-  },
-  listItemMessageButton: {
-    position: 'fixed',
-    right: 0,
-    bottom: 0,
-    width: 50,
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10,
-    borderRadius: 100,
-    marginHorizontal: '5%',
-    marginVertical: '30%',
-    backgroundColor: homevuColors.blue,
-    shadowColor: homevuColors.blueShade,
-
-  },
-  listItemFilterButton: {
-    position: 'fixed',
-    right: 0,
-    bottom: 0,
-    width: 50,
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10,
-    borderRadius: 100,
-    marginHorizontal: '5%',
-    marginVertical: '50%',
-    backgroundColor: homevuColors.yellow,
-    shadowColor: homevuColors.yellowShade,
-
-  },
   buttonShadowProp: {
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.6,
     shadowRadius: 10,
   },
   searchContainer: {
+    flexDirection:'row',
     marginHorizontal: 20,
-    backgroundColor: homevuColors.blueTint
+    alignItems: 'center'
   },
   searchBar: {
+  },
+  menuContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    position: 'fixed',
+    paddingHorizontal: 20,
+    right: 0,
+    left: 0,
+    bottom: 0,
+    height: '10%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: 'white',
   }
 });
 
