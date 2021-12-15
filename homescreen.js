@@ -198,6 +198,7 @@ const styles = StyleSheet.create({
   },
   listContentContainer: {
     justifyContent: 'flex-start',
+    paddingBottom: '30%'
   },
   listItem: {
     flex: 1,
