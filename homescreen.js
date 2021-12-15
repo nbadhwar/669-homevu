@@ -1,14 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, Button } from 'react-native-elements';
+import { ListItem, SearchBar, Input, Icon, Button } from 'react-native-elements';
 import { Image, FlatList, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { getDataModel, homevuColors } from './DataModel';
+import { BottomSheet } from 'react-native-elements/dist/bottomSheet/BottomSheet';
 
 function HomeScreen({ navigation, route }) {
 
   const dataModel = getDataModel();
   const [productList, setProductList] = useState(dataModel.getProductListCopy());
   const [currentUser, setCurrentUser] = useState(route.params ? route.params.currentUser : null)
-  console.log(currentUser)
+
+  /**
+   * Search Reference: https://snack.expo.dev/embedded/@aboutreact/example-of-search-bar-in-react-native?iframeId=ewbug1wk1e&preview=true&platform=ios&theme=dark
+   */
+  const [filteredList, setFilteredList] = useState(dataModel.getProductListCopy());
+  const [search, setSearch] = useState('')
+  console.log(search)
+
+  /**
+   * Bottom Sheet for Filters
+   */
+  const [isVisible, setIsVisible] = useState(false);
+
 
   useEffect(() => {
     dataModel.subscribeToUpdates(() => {
@@ -16,77 +29,176 @@ function HomeScreen({ navigation, route }) {
     });
   }, []);
 
+  const searchResults = (text) => {
+    if (text) {
+      const searchData = productList.filter(function (item) {
+        const itemData = item.title ? item.title.toUpperCase() : ''.toUpperCase()
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      })
+      setFilteredList(searchData)
+      setSearch(text)
+    }
+    else {
+      setFilteredList(dataModel.getProductListCopy())
+      setSearch(text)
+    }
+  }
+
+  /**
+   * List of Items in 
+   */
+  const list = [
+    { title: 'List Item 1' },
+    { title: 'List Item 2' },
+    {
+      title: 'Cancel',
+      containerStyle: { backgroundColor: homevuColors.redShade },
+      titleStyle: { color: 'white' },
+      onPress: () => setIsVisible(false),
+    },
+  ];
+
   return (
-    <View><View style={styles.container}>
-      <View style={styles.listContainer}>
-        <FlatList
-          contentContainerStyle={styles.listContentContainer}
-          data={productList}
-          renderItem={({ item }) => {
-            return (
-              <View>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('Display', { item: item, currentUser: currentUser })}>
-                  <View style={[styles.listItem, styles.shadowProp]}>
-                    <View style={styles.listItemImageContainer}>
-                      <Image style={styles.listItemImage}
-                        source={{ uri: item.image }} />
-                    </View>
-                    <View style={styles.listItemDetailsContainer}>
-                      <Text style={styles.listItemTitle}>{item.title}</Text>
-                      <View style={styles.listItemDetails}>
-                        <Text style={styles.listItemPrice}>${item.price}</Text>
+    < View style={styles.mainContainer} >
+      <BottomSheet
+        isVisible={isVisible}
+        containerStyle={{ backgroundColor: 'rgba(0.5, 0.25, 0, 0.2)' }}>
+        {list.map((l, i) => (
+          <ListItem key={i} containerStyle={l.containerStyle} onPress={l.onPress}>
+            <ListItem.Content>
+              <ListItem.Title style={l.titleStyle}>{l.title}</ListItem.Title>
+            </ListItem.Content>
+          </ListItem>
+        ))}
+      </BottomSheet>
+      <View style={styles.searchContainer}>
+        <SearchBar
+          containerStyle={styles.searchBar}
+          placeholder="Search Item"
+          platform="android"
+          lightTheme={true}
+          round={true}
+          onChangeText={(text) => searchResults(text)}
+          value={search}
+        />
+        <TouchableOpacity
+          style={[styles.listItemFilterButton]}
+          onPress={() => {
+            setIsVisible(true)
+          }}>
+          <Icon
+            size={32}
+            name='filter-list'
+            type='material-icons'
+            color={homevuColors.red}
+
+          />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.container}>
+        <View style={styles.listContainer}>
+          <FlatList
+            contentContainerStyle={styles.listContentContainer}
+            data={search ? filteredList : productList}
+            renderItem={({ item }) => {
+              return (
+                <View>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('Display', { item: item, currentUser: currentUser })}>
+                    <View style={[styles.listItem, styles.shadowProp]}>
+                      <View style={styles.listItemImageContainer}>
+                        <Image style={styles.listItemImage}
+                          source={{ uri: item.image }} />
+                      </View>
+                      <View style={styles.listItemDetailsContainer}>
+                        <Text style={styles.listItemTitle}>{item.title}</Text>
+                        <View style={styles.listItemDetails}>
+                          <Text style={styles.listItemPrice}>${item.price}</Text>
+                        </View>
                       </View>
                     </View>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            );
-          }}
-        />
+                  </TouchableOpacity>
+                </View>
+              );
+            }}
+          />
+        </View>
+      </View >
+      <View style={[styles.menuContainer, styles.shadowProp]}>
+        <TouchableOpacity
+          style={[styles.listItemAddButton]}
+          onPress={() => {
+            navigation.navigate("Home", { currentUser: currentUser });
+          }}>
+          <Icon
+            size={32}
+            name='home'
+            type='material-icons'
+            color={homevuColors.red}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.listItemAddButton]}
+          onPress={() => {
+            navigation.navigate("Details", { currentUser: currentUser });
+          }}>
+          <Icon
+            size={32}
+            name='add-circle'
+            type='material-icons'
+            color={homevuColors.red}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.listItemMessageButton]}
+          onPress={() => {
+            navigation.navigate("Messages", { currentUser: currentUser });
+          }}>
+          <Icon
+            size={32}
+            name='message'
+            type='material-icons'
+            color={homevuColors.red}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.listItemFilterButton]}
+          onPress={() => {
+            //TODO: Navigate to Profile Page
+          }}>
+          <Icon
+            size={32}
+            name='person'
+            type='material-icons'
+            color={homevuColors.red}
+
+          />
+        </TouchableOpacity>
       </View>
-    </View >
-      <TouchableOpacity
-        style={[styles.listItemAddButton, styles.buttonShadowProp]}
-        onPress={() => {
-          navigation.navigate("Details", { currentUser: currentUser });
-        }}>
-        <Icon
-          name='add'
-          type='material-icons'
-          color='white'
-        />
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[styles.listItemMessageButton, styles.buttonShadowProp]}
-        onPress={() => {
-          navigation.navigate("Messages", { currentUser: currentUser });
-        }}>
-        <Icon
-          name='message'
-          type='material-icons'
-          color='white'
-        />
-      </TouchableOpacity>
-
     </View >
   );
 }
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    backgroundColor: 'white'
+  },
   container: {
     backgroundColor: 'white',
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
   listContainer: {
-    padding: 30,
+    paddingHorizontal: 30,
+    paddingBottom: 10,
     width: '100%',
   },
   listContentContainer: {
     justifyContent: 'flex-start',
+    paddingBottom: '30%'
   },
   listItem: {
     flex: 1,
@@ -130,44 +242,33 @@ const styles = StyleSheet.create({
     flex: 0.7,
     fontSize: 12,
     fontWeight: 'bold',
-    color: 'green'
-  },
-  listItemAddButton: {
-    position: 'fixed',
-    right: 0,
-    bottom: 0,
-    width: 50,
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10,
-    borderRadius: 100,
-    marginHorizontal: '5%',
-    marginVertical: '10%',
-    backgroundColor: homevuColors.green,
-    shadowColor: homevuColors.greenShade,
-  },
-  listItemMessageButton: {
-    position: 'fixed',
-    right: 0,
-    bottom: 0,
-    width: 50,
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10,
-    borderRadius: 100,
-    marginHorizontal: '5%',
-    marginVertical: '30%',
-    backgroundColor: homevuColors.blue,
-    shadowColor: homevuColors.blueShade,
-
+    color: homevuColors.greenShade
   },
   buttonShadowProp: {
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.6,
     shadowRadius: 10,
   },
+  searchContainer: {
+    flexDirection:'row',
+    marginHorizontal: 20,
+    alignItems: 'center'
+  },
+  searchBar: {
+  },
+  menuContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    position: 'fixed',
+    paddingHorizontal: 20,
+    right: 0,
+    left: 0,
+    bottom: 0,
+    height: '10%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  }
 });
 
 export default HomeScreen;

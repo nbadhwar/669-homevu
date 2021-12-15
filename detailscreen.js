@@ -4,7 +4,6 @@ import { Image, FlatList, StyleSheet, Text, TextInput, View, Pressable, Touchabl
 import { getDataModel, homevuColors } from './DataModel';
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import { color } from 'react-native-elements/dist/helpers';
 
 function DetailsScreen({navigation, route}) {
 
