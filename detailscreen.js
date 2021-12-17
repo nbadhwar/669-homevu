@@ -15,6 +15,7 @@ function DetailsScreen({navigation, route}) {
   const [price, setPrice] = useState(item? item.price : '');
   const [image, setImage] = useState(item? item.image: null);
   const [payment, setPayment] = useState(item? item.payment: '');
+  const [neighborhood, setNeighborhood] = useState(item ? item.neighborhood : '');
   
   const [currentUser, setCurrentUser] = useState(route.params ? route.params.currentUser : null)
 
@@ -87,6 +88,15 @@ function DetailsScreen({navigation, route}) {
           value={payment}
         />
       </View>
+      <View style={styles.inputArea}>
+        <Text style={styles.inputLabel}>Neighborhood:</Text>
+        <Input 
+          containerStyle={styles.inputBox} 
+          placeholder="e.g. Kerrytown, Downtown, North Campus, etc..."
+          onChangeText={(text)=>setNeighborhood(text)}
+          value={neighborhood}
+        />
+      </View>
       {/* <View style={styles.inputArea}>
         <Text style={styles.inputLabel}>Image URL:</Text>
         <Input 
@@ -145,12 +155,23 @@ function DetailsScreen({navigation, route}) {
               item.description = description;
               item.price = price;
               item.payment = payment;
+              item.neighborhood = neighborhood;
               item.image = image;
               dataModel.updateItem(item.key, item);
               console.log('new data model: ', dataModel.getProductList());
             } else {
               // update data model
-              dataModel.addItem({ user_id: currentUser.key, sellerName: currentUser.displayName, title: title, description: description, price: price, payment: payment, image: image, isChecked: isChecked}); // let the data model add the key
+              dataModel.addItem({ 
+                user_id: currentUser.key, 
+                sellerName: currentUser.displayName, 
+                title: title, 
+                description: description, 
+                neighborhood: neighborhood,
+                price: price, 
+                payment: payment, 
+                image: image, 
+                isChecked: isChecked
+              }); // let the data model add the key
               //console.log('new data model: ', dataModel.getProdcutList());
             }
             navigation.navigate("Home");
