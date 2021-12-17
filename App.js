@@ -8,6 +8,7 @@ import MessageScreen from './messagescreen';
 import ArScreen from './arscreen';
 import DisplayScreen from './displayscreen';
 import { ChatScreen } from './chatscreen';
+import ProfileScreen from './profilescreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +23,7 @@ function App() {
         <Stack.Screen name="Messages" component={MessageScreen} />
         <Stack.Screen name="ARView" component={ArScreen} />
         <Stack.Screen name="Chat" component={ChatScreen} />
+        <Stack.Screen name="Profile" component={ProfileScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
