@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Input, Button, CheckBox } from 'react-native-elements';
+import { Input, Button, CheckBox, Icon } from 'react-native-elements';
 import { Image, FlatList, StyleSheet, Text, TextInput, View, Pressable, TouchableOpacity } from 'react-native';
 import { getDataModel, homevuColors } from './DataModel';
 import { AntDesign } from '@expo/vector-icons';
@@ -119,7 +119,13 @@ function DetailsScreen({navigation, route}) {
               <View style={imageUploaderStyles.uploadBtnContainer}>
                   <TouchableOpacity onPress={addImage} style={imageUploaderStyles.uploadBtn} >
                       <Text>{image ? 'Edit' : 'Upload'} Image</Text>
-                      <AntDesign title="camera" size={20} color="black" />
+                      {/* <AntDesign title="camera" size={20} color="black" /> */}
+                      <Icon 
+                        name="camera-alt" 
+                        size={20} 
+                        type="material-icons"
+                        color="black" 
+                      />
                   </TouchableOpacity>
               </View>
       </View>

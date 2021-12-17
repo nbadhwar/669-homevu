@@ -3,21 +3,73 @@ import { Input, Button, CheckBox, Icon } from 'react-native-elements';
 import { Image, FlatList, StyleSheet, Text, TextInput, View, Pressable, TouchableOpacity } from 'react-native';
 import { getDataModel, homevuColors } from './DataModel';
 import { AntDesign } from '@expo/vector-icons';
+// import { MaterialIcons as Icon } from '@expo/vector-icons'; 
 import * as ImagePicker from 'expo-image-picker';
 import {
     getAuth, updateProfile,
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword
   } from "firebase/auth";
+//import { profile } from 'console';
+//import { isTemplateElement } from 'babel-types';
 
 function ProfileScreen({navigation, route}) {
 
     const [currentUser, setCurrentUser] = useState(route.params ? route.params.currentUser : null)
     const [description, setDescription] = useState(currentUser? currentUser.displayName : '');
+    const [profileImage, setProfileImage] = useState(currentUser ? currentUser.profileImage : null);
     console.log(currentUser);
+
+    const changeUser = currentUser;
+
+    useEffect(() => {
+      checkForCameraRollPermission()
+    }, []);
+
+    const addImage = async () => {
+      let _image = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4,3],
+        quality: 1,
+      });
+  
+      console.log("THIS IS THE OBJECT: " + JSON.stringify(_image));
+  
+      if (!_image.cancelled) {
+        setProfileImage(_image.uri);
+      }
+    };
+  
+    const  checkForCameraRollPermission=async()=>{
+      const { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        alert("Please grant camera roll permissions inside your system's settings");
+      }else{
+        console.log('Media Permissions are granted')
+      }
+    
+  }
 
   return (
     <View style={styles.container}>
+        <View style={imageUploaderStyles.container}>
+          {
+              profileImage  && <Image source={{ uri: profileImage }} style={{ width: 200, height: 200 }} />
+          }
+              
+              <View style={imageUploaderStyles.uploadBtnContainer}>
+                  <TouchableOpacity onPress={addImage} style={imageUploaderStyles.uploadBtn} >
+                      <Text>{profileImage ? 'Edit' : 'Upload'} Image</Text>
+                      <Icon 
+                        name="camera-alt" 
+                        size={20} 
+                        type="material-icons"
+                        color="black" 
+                      />
+                  </TouchableOpacity>
+              </View>
+      </View>
         <View style={styles.inputArea}>
         <Text style={styles.inputLabel}>Edit Display Name:</Text>
         <Input 
@@ -31,7 +83,12 @@ function ProfileScreen({navigation, route}) {
           containerStyle={styles.button}
           title={"Save"}
           onPress={()=>{
-            updateProfile(currentUser.authId, { displayName: description });
+            
+            changeUser.displayName = description;
+            changeUser.profileImage = profileImage;
+            getDataModel().updateUserDisplayName(currentUser.key, changeUser);
+            navigation.navigate("Home", { currentUser: currentUser });
+
           }}
         />
         <Button
@@ -99,6 +156,33 @@ function ProfileScreen({navigation, route}) {
   );
   
 }
+
+const imageUploaderStyles=StyleSheet.create({
+  container:{
+      elevation:2,
+      height:200,
+      width:200, 
+      backgroundColor:'#efefef',
+      borderRadius:999,
+      position:'relative',
+      overflow: 'hidden',
+      margin: 20,
+  },
+  uploadBtnContainer:{
+      opacity:0.7,
+      position:'absolute',
+      right:0,
+      bottom:0,
+      backgroundColor:'lightgrey',
+      width:'100%',
+      height:'25%',
+  },
+  uploadBtn:{
+      display:'flex',
+      alignItems:"center",
+      justifyContent:'center'
+  }
+})
 
 const styles = StyleSheet.create({
     container: {
