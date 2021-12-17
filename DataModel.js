@@ -359,6 +359,15 @@ class DataModel {
         addDoc(messagesRef, messageContents); // let onSnapshot() do it's work!
     }
 
+    updateUserDisplayName = async (key, name) => {
+        //db changes
+        const updateItemDocRef = doc(db, 'users', key);
+        await updateDoc(updateItemDocRef, name);
+
+        this.updateSubscribers();
+    }
+
+
 }
 
 
