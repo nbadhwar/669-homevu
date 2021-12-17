@@ -11,6 +11,11 @@ function HomeScreen({ navigation, route }) {
   const [currentUser, setCurrentUser] = useState(route.params ? route.params.currentUser : null)
 
   /**
+   * Sort by Price
+   */
+  const [priceLowtoHigh, setPriceFilter] = useState(dataModel.getProductListCopy());
+
+  /**
    * Search Reference: https://snack.expo.dev/embedded/@aboutreact/example-of-search-bar-in-react-native?iframeId=ewbug1wk1e&preview=true&platform=ios&theme=dark
    */
   const [filteredList, setFilteredList] = useState(dataModel.getProductListCopy());
@@ -45,12 +50,34 @@ function HomeScreen({ navigation, route }) {
     }
   }
 
+  function sortByPrice(productList) {
+    if (productList) {
+
+      if (priceLowtoHigh) {
+        productList.sort(function (a, b) {
+          return a.price - b.price
+        })
+      }
+      else {
+        productList.sort(function (a, b) {
+          return (b.price - a.price)
+        })
+      }
+    }
+    setProductList(productList)
+  }
+
   /**
-   * List of Items in 
+   * List
    */
   const list = [
-    { title: 'List Item 1' },
-    { title: 'List Item 2' },
+    {
+      title: 'Sort By Price: ' + (priceLowtoHigh ? 'Low to High' : 'High to Low'),
+      onPress: () => {
+        sortByPrice(productList)
+        setPriceFilter(!priceLowtoHigh)
+      }
+    },
     {
       title: 'Cancel',
       containerStyle: { backgroundColor: homevuColors.redShade },
@@ -250,7 +277,7 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
   },
   searchContainer: {
-    flexDirection:'row',
+    flexDirection: 'row',
     marginHorizontal: 20,
     alignItems: 'center'
   },
