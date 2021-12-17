@@ -3,7 +3,7 @@ import { Icon, Button } from 'react-native-elements';
 import { TextInput, Text, View, 
   FlatList, TouchableOpacity, StyleSheet } 
   from 'react-native';
-import { getDataModel } from './DataModel';
+import { getDataModel, homevuColors } from './DataModel';
 
 
 function MessageScreen({navigation, route}) {
@@ -32,14 +32,6 @@ function MessageScreen({navigation, route}) {
             <Text style={[styles.headerText, {fontSize: 32}]}> 
               Hi, {currentUser.displayName}
             </Text>
-            <Icon 
-              name='log-out'
-              color='black'
-              size={24}
-              onPress={()=>{
-                navigation.navigate('Login');
-              }}
-            />
           </View>
           <View style={[styles.headerRow, {justifyContent: 'flex-start'}]}>
             <Text style={styles.headerText}>
@@ -66,6 +58,9 @@ function MessageScreen({navigation, route}) {
                     }}
                   >
                     <Text style={styles.userListItemText}>{item.displayName}</Text>
+                    <View style={styles.listDivider}>
+
+                    </View>
                   </TouchableOpacity>
                 );
               }
@@ -81,16 +76,18 @@ function MessageScreen({navigation, route}) {
       flex: 1,
       justifyContent: 'flex-start',
       alignItems: 'flex-start',
-      paddingTop: '15%',
-      paddingHorizontal: '2%'
+      backgroundColor: 'white',
     },
   
     header: {
-      flex: 0.2,
+      flex: 0.4,
       justifyContent: 'center',
       alignItems: 'center',
       width: '100%',
-      marginBottom: '5%'
+      marginBottom: '5%',
+      backgroundColor: homevuColors.redTint,
+      padding: '5%',
+
     },
     headerRow: {
       flex: 1,
@@ -98,26 +95,36 @@ function MessageScreen({navigation, route}) {
       justifyContent: 'space-between',
       alignItems: 'center',
       width: '100%',
-      paddingHorizontal: '5%'
     },
     headerText: {
       fontSize: 18,
       //padding: '3%'
+      color: 'white',
     },
-  
     userListContainer: {
-      justifyContent: 'center',
-      alignItems: 'center',
-    paddingHorizontal: '5%'
+      width: '100%',
+      margin: 10,
+
     },
     userListItem: {
-      width: '100%',
-      padding: '5%'
+      paddingVertical: 10,
+
     },
     userListItemText: {
+      margin: 10,
       fontSize: 18,
-      color: 'green',
+      paddingHorizontal: 10,
+
+
     },  
+
+    listDivider:{
+      marginTop: 10,
+      height: 1,
+      width: '100%',
+      backgroundColor: 'grey',
+
+    },
   
   });
 
