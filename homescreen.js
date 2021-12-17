@@ -9,24 +9,19 @@ function HomeScreen({ navigation, route }) {
   const dataModel = getDataModel();
   const [productList, setProductList] = useState(dataModel.getProductListCopy());
   const [currentUser, setCurrentUser] = useState(route.params ? route.params.currentUser : null)
+  const [isBookmarked, setBookmarked] = useState(true)
 
-  /**
-   * Sort by Price
-   */
-  const [priceLowtoHigh, setPriceFilter] = useState(dataModel.getProductListCopy());
+  //Sort by Price
+  const [priceLowtoHigh, setPriceFilter] = useState(false);
 
   /**
    * Search Reference: https://snack.expo.dev/embedded/@aboutreact/example-of-search-bar-in-react-native?iframeId=ewbug1wk1e&preview=true&platform=ios&theme=dark
    */
   const [filteredList, setFilteredList] = useState(dataModel.getProductListCopy());
   const [search, setSearch] = useState('')
-  console.log(search)
 
-  /**
-   * Bottom Sheet for Filters
-   */
+  //Bottom Sheet for Filters
   const [isVisible, setIsVisible] = useState(false);
-
 
   useEffect(() => {
     dataModel.subscribeToUpdates(() => {
@@ -142,6 +137,37 @@ function HomeScreen({ navigation, route }) {
                         <Text style={styles.listItemTitle}>{item.title}</Text>
                         <View style={styles.listItemDetails}>
                           <Text style={styles.listItemPrice}>${item.price}</Text>
+                          <TouchableOpacity
+                            style={[styles.listItemAddButton]}
+                            onPress={() => {
+                              setBookmarked(!isBookmarked)
+                              item.isBookmarked = isBookmarked
+                              console.log('this item is bookmarked: ' + item.isBookmarked)
+                              if(item.isBookmarked) {
+                                dataModel.addBookmarked({bookmarkedKey: (currentUser.key + item.key), bookmarkedItem: item })
+                              }
+                              else {
+                                var bookmarkedKey = currentUser.key + item.key
+                                dataModel.removeBookmarked(bookmarkedKey)
+                                console.log('deleting doc at: ' + bookmarkedKey)
+                              }
+                            }}>
+                            {item.isBookmarked ? 
+                              <Icon
+                                size={24}
+                                name='star'
+                                type='material-icons'
+                                color={homevuColors.yellow}
+                              />
+                              :
+                              <Icon
+                                size={24}
+                                name='star-border'
+                                type='material-icons'
+                                color={homevuColors.yellow}
+                              />
+                            }
+                          </TouchableOpacity>
                         </View>
                       </View>
                     </View>
@@ -264,10 +290,15 @@ const styles = StyleSheet.create({
     flex: 0.7,
     fontSize: 14
   },
+  listItemDetails: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
   listItemPrice: {
     marginTop: 2,
     flex: 0.7,
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: 'bold',
     color: homevuColors.greenShade
   },

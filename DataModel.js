@@ -27,6 +27,10 @@ class DataModel {
         this.productListRef = collection(db, 'productList')
         this.subscribers = [];
 
+        //Bookmarked
+        this.bookmarkedList = [];
+        this.bookmarkedListRef = collection(db, 'bookmarkedList')
+
         this.initUsersOnSnapshot();
 
         //hardcoded list for testing
@@ -116,6 +120,10 @@ class DataModel {
             item.title = 'untitled item'
         }
 
+        if (item.isBookmarked == null) {
+            item.isBookmarked = false
+        }
+
         //Maybe a dropdown for furniture types in DetailScreen
         if (item.type == null) {
             item.type = 'furniture'
@@ -194,6 +202,24 @@ class DataModel {
         this.updateSubscribers()
     }
 
+    /**********************************************
+    * Bookmarked Items
+    * id = user_id + item_id
+    * removes item when bookmarked removed
+    * adds item when bookmarked added
+   ************************************************/
+
+    addBookmarked = async (item) => {
+        const newItemDocRef = await addDoc(this.bookmarkedListRef, item);
+        item.key = newItemDocRef.id;
+        console.log('bookmarkedItem added')
+    }
+
+    removeBookmarked = async (bookmarkedKey) => {
+        //db changes
+        const delItemDocRef = doc(db, 'bookmarkedList', bookmarkedKey)
+        await deleteDoc(delItemDocRef)
+    }
 
     /**********************************************
      * Users and Authentication Data
