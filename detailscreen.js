@@ -14,6 +14,7 @@ function DetailsScreen({navigation, route}) {
   const [isChecked, setIsChecked] = useState(true);
   const [price, setPrice] = useState(item? item.price : '');
   const [image, setImage] = useState(item? item.image: null);
+  const [payment, setPayment] = useState(item? item.payment: '');
   
   const [currentUser, setCurrentUser] = useState(route.params ? route.params.currentUser : null)
 
@@ -77,6 +78,15 @@ function DetailsScreen({navigation, route}) {
           value={price}
         />
       </View>
+      <View style={styles.inputArea}>
+        <Text style={styles.inputLabel}>Venmo Username:</Text>
+        <Input 
+          containerStyle={styles.inputBox} 
+          placeholder="@userName..."
+          onChangeText={(text)=>setPayment(text)}
+          value={payment}
+        />
+      </View>
       {/* <View style={styles.inputArea}>
         <Text style={styles.inputLabel}>Image URL:</Text>
         <Input 
@@ -134,12 +144,13 @@ function DetailsScreen({navigation, route}) {
               item.availability = isChecked;
               item.description = description;
               item.price = price;
+              item.payment = payment;
               item.image = image;
               dataModel.updateItem(item.key, item);
               console.log('new data model: ', dataModel.getProductList());
             } else {
               // update data model
-              dataModel.addItem({ user_id: currentUser.key, sellerName: currentUser.displayName, title: title, description: description, price: price, image: image, isChecked: isChecked}); // let the data model add the key
+              dataModel.addItem({ user_id: currentUser.key, sellerName: currentUser.displayName, title: title, description: description, price: price, payment: payment, image: image, isChecked: isChecked}); // let the data model add the key
               //console.log('new data model: ', dataModel.getProdcutList());
             }
             navigation.navigate("Home");
