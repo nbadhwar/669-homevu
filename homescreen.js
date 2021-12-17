@@ -194,7 +194,7 @@ function HomeScreen({ navigation, route }) {
         <TouchableOpacity
           style={[styles.listItemFilterButton]}
           onPress={() => {
-            //TODO: Navigate to Profile Page
+            navigation.navigate("Profile", { currentUser: currentUser });
           }}>
           <Icon
             size={32}
