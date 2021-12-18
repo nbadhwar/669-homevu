@@ -219,6 +219,7 @@ class DataModel {
         //db changes
         const delItemDocRef = doc(db, 'bookmarkedList', bookmarkedKey)
         await deleteDoc(delItemDocRef)
+        console.log(bookmarkedKey + ' is deleted')
     }
 
     /**********************************************
@@ -386,8 +387,6 @@ class DataModel {
     }
 
 }
-
-
 
 let theDataModel;
 
