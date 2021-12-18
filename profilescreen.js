@@ -5,13 +5,6 @@ import { getDataModel, homevuColors } from './DataModel';
 import { AntDesign } from '@expo/vector-icons';
 // import { MaterialIcons as Icon } from '@expo/vector-icons'; 
 import * as ImagePicker from 'expo-image-picker';
-import {
-    getAuth, updateProfile,
-    signInWithEmailAndPassword,
-    createUserWithEmailAndPassword
-  } from "firebase/auth";
-//import { profile } from 'console';
-//import { isTemplateElement } from 'babel-types';
 
 function ProfileScreen({navigation, route}) {
 
