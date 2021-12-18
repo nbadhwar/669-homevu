@@ -85,6 +85,65 @@ return (
         }}
         />
     </View>
+    <View style={[styles.menuContainer, styles.shadowProp]}>
+        <TouchableOpacity
+          style={[styles.listItemAddButton]}
+          onPress={() => {
+            navigation.navigate("Home", { currentUser: currentUser });
+          }}>
+          <Icon
+            size={32}
+            name='home'
+            type='material-icons'
+            color={homevuColors.red}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.listItemAddButton]}
+          onPress={() => {
+            navigation.navigate("Details", { currentUser: currentUser });
+          }}>
+          <Icon
+            size={32}
+            name='add-circle'
+            type='material-icons'
+            color={homevuColors.red}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.listItemMessageButton]}
+          onPress={() => {
+            navigation.navigate("Messages", { currentUser: currentUser });
+          }}>
+          <Icon
+            size={32}
+            name='message'
+            type='material-icons'
+            color={homevuColors.red}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.listItemFilterButton]}
+          onPress={() => {
+            navigation.navigate("Profile", { currentUser: currentUser });
+          }}>
+          {currentUser.profileImage ?
+            <Avatar
+              rounded
+              size={32}
+              source={currentUser.profileImage}
+            /> :
+            <Icon
+              size={32}
+              name='person'
+              type='material-icons'
+              color={homevuColors.red}
+            />
+          }
+        </TouchableOpacity>
+      </View>
     </View>
 );
 }

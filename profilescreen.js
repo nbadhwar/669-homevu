@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Input, Button, CheckBox, Icon } from 'react-native-elements';
+import { Avatar, Input, Button, CheckBox, Icon } from 'react-native-elements';
 import { Image, FlatList, StyleSheet, Text, TextInput, View, Pressable, TouchableOpacity } from 'react-native';
 import { getDataModel, homevuColors } from './DataModel';
 import { AntDesign } from '@expo/vector-icons';
@@ -142,13 +142,19 @@ function ProfileScreen({navigation, route}) {
           onPress={() => {
             navigation.navigate("Profile", { currentUser: currentUser });
           }}>
-          <Icon
-            size={32}
-            name='person'
-            type='material-icons'
-            color={homevuColors.red}
-
-          />
+          {currentUser.profileImage ?
+            <Avatar
+              rounded
+              size={32}
+              source={currentUser.profileImage}
+            /> :
+            <Icon
+              size={32}
+              name='person'
+              type='material-icons'
+              color={homevuColors.red}
+            />
+          }
         </TouchableOpacity>
       </View>
     </View>

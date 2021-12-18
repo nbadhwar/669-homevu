@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, Button } from 'react-native-elements';
+import { Avatar, Icon, Button } from 'react-native-elements';
 import { Image, FlatList, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { getDataModel, homevuColors } from './DataModel';
 import { color } from 'react-native-elements/dist/helpers';
@@ -8,7 +8,7 @@ import { color } from 'react-native-elements/dist/helpers';
 function DisplayScreen({ navigation, route }) {
     let item = route.params.item
     const [currentUser, setCurrentUser] = useState(route.params ? route.params.currentUser : null)
-    console.log(currentUser)
+    console.log(currentUser.profileImage)
     const dataModel = getDataModel();
     return (
         <View style={styles.body}>
@@ -16,13 +16,14 @@ function DisplayScreen({ navigation, route }) {
                 <Image
                     style={styles.displayItemImage}
                     source={{ uri: item.image }}
-                     />
+                />
             </View>
             <View style={styles.displayContainer}>
                 <Text style={styles.displayItemTitle}>{item.title}</Text>
                 <Text style={styles.displayItemPrice}>${item.price}</Text>
                 <Text style={styles.displayItemDescription}>{item.description}</Text>
-                <Text style={styles.displayItemSeller}>Sold by {item.sellerName ? item.sellerName : "Unknown"}</Text>
+                <Text style={styles.displayItemSeller}>Sold by {item.sellerName ? item.sellerName : "Unknown"}
+                </Text>
             </View>
             {(currentUser.key === item.user_id) ?
                 <View style={styles.displayButtonsContainer}>

@@ -3,6 +3,7 @@ import { ListItem, SearchBar, Input, Icon, Button } from 'react-native-elements'
 import { Image, FlatList, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { getDataModel, homevuColors } from './DataModel';
 import { BottomSheet } from 'react-native-elements/dist/bottomSheet/BottomSheet';
+import { Avatar } from 'react-native-elements/dist/avatar/Avatar';
 
 function HomeScreen({ navigation, route }) {
 
@@ -196,13 +197,19 @@ function HomeScreen({ navigation, route }) {
           onPress={() => {
             navigation.navigate("Profile", { currentUser: currentUser });
           }}>
-          <Icon
-            size={32}
-            name='person'
-            type='material-icons'
-            color={homevuColors.red}
-
-          />
+          {currentUser.profileImage ?
+            <Avatar
+              rounded
+              size={32}
+              source={currentUser.profileImage}
+            /> :
+            <Icon
+              size={32}
+              name='person'
+              type='material-icons'
+              color={homevuColors.red}
+            />
+          }
         </TouchableOpacity>
       </View>
     </View >

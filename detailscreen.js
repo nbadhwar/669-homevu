@@ -1,22 +1,22 @@
-import React, {useState, useEffect} from 'react';
-import { Input, Button, CheckBox, Icon } from 'react-native-elements';
+import React, { useState, useEffect } from 'react';
+import { Avatar, Input, Button, CheckBox, Icon } from 'react-native-elements';
 import { Image, FlatList, StyleSheet, Text, TextInput, View, Pressable, TouchableOpacity } from 'react-native';
 import { getDataModel, homevuColors } from './DataModel';
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 
-function DetailsScreen({navigation, route}) {
+function DetailsScreen({ navigation, route }) {
 
   let item = route.params ? route.params.item : null;
   let editMode = (item != null);
-  const [title, setTitle] = useState(item? item.title : '');
-  const [description, setDescription] = useState(item? item.description : '');
+  const [title, setTitle] = useState(item ? item.title : '');
+  const [description, setDescription] = useState(item ? item.description : '');
   const [isChecked, setIsChecked] = useState(true);
-  const [price, setPrice] = useState(item? item.price : '');
-  const [image, setImage] = useState(item? item.image: null);
-  const [payment, setPayment] = useState(item? item.payment: '');
+  const [price, setPrice] = useState(item ? item.price : '');
+  const [image, setImage] = useState(item ? item.image : null);
+  const [payment, setPayment] = useState(item ? item.payment : '');
   const [neighborhood, setNeighborhood] = useState(item ? item.neighborhood : '');
-  
+
   const [currentUser, setCurrentUser] = useState(route.params ? route.params.currentUser : null)
 
   const dataModel = getDataModel();
@@ -29,7 +29,7 @@ function DetailsScreen({navigation, route}) {
     let _image = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4,3],
+      aspect: [4, 3],
       quality: 1,
     });
 
@@ -40,60 +40,60 @@ function DetailsScreen({navigation, route}) {
     }
   };
 
-  const  checkForCameraRollPermission=async()=>{
+  const checkForCameraRollPermission = async () => {
     const { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
       alert("Please grant camera roll permissions inside your system's settings");
-    }else{
+    } else {
       console.log('Media Permissions are granted')
     }
-  
-}
+
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.inputArea}>
         <Text style={styles.inputLabel}>Title:</Text>
-        <Input 
-          containerStyle={styles.inputBox} 
+        <Input
+          containerStyle={styles.inputBox}
           placeholder="Item title..."
-          onChangeText={(text)=>setTitle(text)}
+          onChangeText={(text) => setTitle(text)}
           value={title}
         />
-      </View>  
+      </View>
       <View style={styles.inputArea}>
         <Text style={styles.inputLabel}>Description:</Text>
-        <Input 
-          containerStyle={styles.inputBox} 
+        <Input
+          containerStyle={styles.inputBox}
           placeholder="Item description..."
-          onChangeText={(text)=>setDescription(text)}
+          onChangeText={(text) => setDescription(text)}
           value={description}
         />
       </View>
       <View style={styles.inputArea}>
         <Text style={styles.inputLabel}>Price:</Text>
-        <Input 
-          containerStyle={styles.inputBox} 
+        <Input
+          containerStyle={styles.inputBox}
           placeholder="Item price..."
-          onChangeText={(text)=>setPrice(text)}
+          onChangeText={(text) => setPrice(text)}
           value={price}
         />
       </View>
       <View style={styles.inputArea}>
         <Text style={styles.inputLabel}>Venmo Username:</Text>
-        <Input 
-          containerStyle={styles.inputBox} 
+        <Input
+          containerStyle={styles.inputBox}
           placeholder="@userName..."
-          onChangeText={(text)=>setPayment(text)}
+          onChangeText={(text) => setPayment(text)}
           value={payment}
         />
       </View>
       <View style={styles.inputArea}>
         <Text style={styles.inputLabel}>Neighborhood:</Text>
-        <Input 
-          containerStyle={styles.inputBox} 
+        <Input
+          containerStyle={styles.inputBox}
           placeholder="e.g. Kerrytown, Downtown, North Campus, etc..."
-          onChangeText={(text)=>setNeighborhood(text)}
+          onChangeText={(text) => setNeighborhood(text)}
           value={neighborhood}
         />
       </View>
@@ -110,48 +110,48 @@ function DetailsScreen({navigation, route}) {
         <UploadImage/>
         <Text style={{marginVertical:20,fontSize:16}}>Upload product image</Text>
       </View>     */}
-  
-        <View style={imageUploaderStyles.container}>
-          {
-              image  && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
-          }
-              
-              <View style={imageUploaderStyles.uploadBtnContainer}>
-                  <TouchableOpacity onPress={addImage} style={imageUploaderStyles.uploadBtn} >
-                      <Text>{image ? 'Edit' : 'Upload'} Image</Text>
-                      {/* <AntDesign title="camera" size={20} color="black" /> */}
-                      <Icon 
-                        name="camera-alt" 
-                        size={20} 
-                        type="material-icons"
-                        color="black" 
-                      />
-                  </TouchableOpacity>
-              </View>
+
+      <View style={imageUploaderStyles.container}>
+        {
+          image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
+        }
+
+        <View style={imageUploaderStyles.uploadBtnContainer}>
+          <TouchableOpacity onPress={addImage} style={imageUploaderStyles.uploadBtn} >
+            <Text>{image ? 'Edit' : 'Upload'} Image</Text>
+            {/* <AntDesign title="camera" size={20} color="black" /> */}
+            <Icon
+              name="camera-alt"
+              size={20}
+              type="material-icons"
+              color="black"
+            />
+          </TouchableOpacity>
+        </View>
       </View>
 
-      <View>      
+      <View>
         <CheckBox
-          title= "Available"
-          checked = {isChecked}
-          onPress={ () => {
+          title="Available"
+          checked={isChecked}
+          onPress={() => {
             setIsChecked(!isChecked);
-          }}      
+          }}
         />
-      </View>  
+      </View>
 
       <View style={styles.buttonArea}>
         <Button
           containerStyle={styles.button}
           title="Cancel"
-          onPress={()=>{
+          onPress={() => {
             navigation.navigate("Home");
           }}
         />
         <Button
           containerStyle={styles.button}
           title={editMode ? "Save" : "Add Item"}
-          onPress={()=>{
+          onPress={() => {
             if (editMode) {
               item.user_id = currentUser.key
               item.sellerName = currentUser.displayName
@@ -167,15 +167,15 @@ function DetailsScreen({navigation, route}) {
               console.log('new data model: ', dataModel.getProductList());
             } else {
               // update data model
-              dataModel.addItem({ 
-                user_id: currentUser.key, 
-                sellerName: currentUser.displayName, 
-                title: title, 
-                description: description, 
+              dataModel.addItem({
+                user_id: currentUser.key,
+                sellerName: currentUser.displayName,
+                title: title,
+                description: description,
                 neighborhood: neighborhood,
-                price: price, 
-                payment: payment, 
-                image: image, 
+                price: price,
+                payment: payment,
+                image: image,
                 isChecked: isChecked
               }); // let the data model add the key
               //console.log('new data model: ', dataModel.getProdcutList());
@@ -186,30 +186,30 @@ function DetailsScreen({navigation, route}) {
       </View>
     </View>
   );
-  
+
 }
 
-const imageUploaderStyles=StyleSheet.create({
-  container:{
-      elevation:2,
-      height:200,
-      width:200, 
-      backgroundColor:'#efefef',
-      position:'relative',
+const imageUploaderStyles = StyleSheet.create({
+  container: {
+    elevation: 2,
+    height: 200,
+    width: 200,
+    backgroundColor: '#efefef',
+    position: 'relative',
   },
-  uploadBtnContainer:{
-      opacity:0.7,
-      position:'absolute',
-      right:0,
-      bottom:0,
-      backgroundColor:'lightgrey',
-      width:'100%',
-      height:'25%',
+  uploadBtnContainer: {
+    opacity: 0.7,
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'lightgrey',
+    width: '100%',
+    height: '25%',
   },
-  uploadBtn:{
-      display:'flex',
-      alignItems:"center",
-      justifyContent:'center'
+  uploadBtn: {
+    display: 'flex',
+    alignItems: "center",
+    justifyContent: 'center'
   }
 })
 
@@ -226,14 +226,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginBottom: 10 
+    marginBottom: 10
   },
   inputLabel: {
     width: 120,
     textAlign: 'right',
-    fontSize: 18,
+    fontSize: 12,
     paddingRight: 10,
-    paddingBottom: 10,
+    paddingBottom: 5,
     color: homevuColors.redShade,
     fontWeight: 'bold'
   },
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
   },
   button: {
     width: '45%'
-  }
+  },
 });
 
 

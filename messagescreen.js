@@ -80,7 +80,7 @@ function MessageScreen({navigation, route}) {
     },
   
     header: {
-      flex: 0.4,
+      flex: 0.2,
       justifyContent: 'center',
       alignItems: 'center',
       width: '100%',
@@ -102,6 +102,7 @@ function MessageScreen({navigation, route}) {
       color: 'white',
     },
     userListContainer: {
+      flex: 0.9,
       width: '100%',
       margin: 10,
 
