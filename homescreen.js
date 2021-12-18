@@ -155,7 +155,6 @@ function HomeScreen({ navigation, route }) {
       </View >
       <View style={[styles.menuContainer, styles.shadowProp]}>
         <TouchableOpacity
-          style={[styles.listItemAddButton]}
           onPress={() => {
             navigation.navigate("Home", { currentUser: currentUser });
           }}>
@@ -167,7 +166,6 @@ function HomeScreen({ navigation, route }) {
           />
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.listItemAddButton]}
           onPress={() => {
             navigation.navigate("Details", { currentUser: currentUser });
           }}>
@@ -180,7 +178,6 @@ function HomeScreen({ navigation, route }) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.listItemMessageButton]}
           onPress={() => {
             navigation.navigate("Messages", { currentUser: currentUser });
           }}>
@@ -193,7 +190,6 @@ function HomeScreen({ navigation, route }) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.listItemFilterButton]}
           onPress={() => {
             navigation.navigate("Profile", { currentUser: currentUser });
           }}>

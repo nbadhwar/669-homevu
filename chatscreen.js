@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { TextInput, Text, View, 
+import { Avatar, ListItem, SearchBar, Input, Icon, Button } from 'react-native-elements';
+import { TouchableOpacity, TextInput, Text, View, 
     FlatList, StyleSheet } 
     from 'react-native';
-import { FontAwesome as Icon } from '@expo/vector-icons';
-import { getDataModel } from './DataModel';
+import { homevuColors, getDataModel } from './DataModel';
   
 export function ChatScreen ({navigation, route}) {
 
@@ -211,4 +211,17 @@ messageContainer: {
 messageText: {
     fontSize: 18
 },
+menuContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    position: 'fixed',
+    paddingHorizontal: 20,
+    right: 0,
+    left: 0,
+    bottom: 0,
+    height: '10%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  }
 });

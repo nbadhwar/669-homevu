@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, Button } from 'react-native-elements';
+import { Avatar, Icon, Button } from 'react-native-elements';
 import { TextInput, Text, View, 
   FlatList, TouchableOpacity, StyleSheet } 
   from 'react-native';
